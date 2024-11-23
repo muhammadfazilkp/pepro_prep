@@ -1,4 +1,6 @@
 import 'package:education_media/ui/home/home_view.dart';
+import 'package:education_media/ui/login/login_view.dart';
+import 'package:education_media/ui/signup/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -17,7 +19,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: const HomeView(),
+      home: const SignInScreen(),
     );
   }
 }
