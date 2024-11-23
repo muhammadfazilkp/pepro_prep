@@ -1,8 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
+
+import 'package:education_media/ui/video/video_view.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:stacked/stacked.dart';
-import 'home_viewmodel.dart'; // Import your ViewModel
+import 'home_viewmodel.dart'; 
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -10,7 +11,6 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<HomeViewmodel>.reactive(
-      viewModelBuilder: () => HomeViewmodel(),
       builder: (context, viewModel, child) {
         return Scaffold(
           backgroundColor: Colors.white,
@@ -29,22 +29,21 @@ class HomeView extends StatelessWidget {
                 CarouselSlider(
                   items: [
                     Container(
-                      
                       child: const Center(child: Text('Item 1')),
                       decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(15)),
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(15)),
                     ),
                     Container(
                       decoration: BoxDecoration(
-                        color: Colors.blue,
-                        borderRadius: BorderRadius.circular(15)),
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.circular(15)),
                       child: const Center(child: Text('Item 2')),
                     ),
                     Container(
-                       decoration: BoxDecoration(
-                        color: Colors.green ,
-                        borderRadius: BorderRadius.circular(15)),
+                      decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.circular(15)),
                       child: const Center(child: Text('Item 3')),
                     ),
                   ],
@@ -73,10 +72,34 @@ class HomeView extends StatelessWidget {
                   'Current Page: ${viewModel.currentPage}',
                   style: const TextStyle(fontSize: 18, color: Colors.white),
                 ),
+                 Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 17),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Physics',
+                        style: TextStyle(color: Colors.black, fontSize: 13),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          // navigationService.pushNamed(RoutePaths.videoView);/
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => VideoView(),));
+                          
+                        },
+                        child: Text(
+                          'View all ',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
                 Expanded(
                   child: ListView.separated(
                     physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 2),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
                       return Container(
@@ -143,12 +166,11 @@ class HomeView extends StatelessWidget {
                     itemCount: 10,
                   ),
                 ),
-
-                
                 Expanded(
                   child: ListView.separated(
                     physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 1),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 1),
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
                       return SizedBox(
@@ -222,6 +244,7 @@ class HomeView extends StatelessWidget {
           ),
         );
       },
+      viewModelBuilder: () => HomeViewmodel(),
     );
   }
 }
