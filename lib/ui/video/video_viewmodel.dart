@@ -1,11 +1,11 @@
-// import 'package:chewie/chewie.dart';
+import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoViewmodel extends ChangeNotifier {
   late VideoPlayerController videoPlayerController;
   late Future<void> _initializeVideoPlayerFuture;
-  // late  ChewieController chewieController;
+  late ChewieController chewieController;
 
   bool isVideoLoading = false;
   bool isError = false;
@@ -26,14 +26,17 @@ class VideoViewmodel extends ChangeNotifier {
       _initializeVideoPlayerFuture = videoPlayerController.initialize();
       videoPlayerController.setLooping(true);
 
-      //  chewieController = ChewieController(
-      //   // aspectRatio:  CircularProgressIndicator.strokeAlignOutside,
-      //   // aspectRatio: ,
-      //   videoPlayerController: videoPlayerController,
-      //   autoPlay: true,
-      //   looping: true,
-      //   fullScreenByDefault: true
-      // );
+      // use this package and it works or not
+
+      chewieController = ChewieController(
+         
+          videoPlayerController: videoPlayerController,
+          autoPlay: true,
+          looping: true,
+          allowFullScreen: true
+
+          // fullScreenByDefault: true
+          );
 
       isVideoLoading = false;
       notifyListeners();

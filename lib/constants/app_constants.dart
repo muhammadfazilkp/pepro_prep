@@ -3,7 +3,8 @@ abstract class RoutePaths {
   static const String loginView = 'loginView';
   static const String homeView = '/homeview';
   static const String signUp = '/signUp';
-  static const String videoView='/videoview';
+  static const String videoView = '/videoview';
+  static const String login = '/login';
 }
 
 abstract class Gender {

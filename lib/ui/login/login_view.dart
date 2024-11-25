@@ -1,64 +1,66 @@
 import 'package:education_media/constants/app_constants.dart';
+import 'package:education_media/ui/home/home_view.dart';
 import 'package:education_media/ui/login/login_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
 class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<LoginViewModel>.reactive(
-      viewModelBuilder: ()=>LoginViewModel(), 
-      builder: (context,viewModel,child){
-        return  Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: const Text("Sign In"),
-      ),
-      body: SafeArea(
-        child: SizedBox(
-          width: double.infinity,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  const SizedBox(height: 16),
-                  const Text(
-                    "Welcome Back",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+        viewModelBuilder: () => LoginViewModel(),
+        builder: (context, viewModel, child) {
+          return Scaffold(
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              backgroundColor: Colors.white,
+              title: const Text("Sign In"),
+            ),
+            body: SafeArea(
+              child: SizedBox(
+                width: double.infinity,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 16),
+                        const Text(
+                          "Welcome Back",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        const Text(
+                          "Sign in with your email and password  \nor continue with social media",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Color(0xFF757575)),
+                        ),
+                        // const SizedBox(height: 16),
+                        SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.05),
+                        SignInForm(),
+                        SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.2),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [],
+                        ),
+                        const SizedBox(height: 16),
+                        const NoAccountText(),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    "Sign in with your email and password  \nor continue with social media",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Color(0xFF757575)),
-                  ),
-                  // const SizedBox(height: 16),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                  SignInForm(),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.2),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                   
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  const NoAccountText(),
-                ],
+                ),
               ),
             ),
-          ),
-        ),
-      ),
-    );
-      });
+          );
+        });
   }
 }
 
@@ -88,7 +90,7 @@ class SignInForm extends StatelessWidget {
                   horizontal: 24,
                   vertical: 16,
                 ),
-               suffix: SvgPicture.string(mailIcon),
+                suffix: SvgPicture.string(mailIcon),
                 border: authOutlineInputBorder,
                 enabledBorder: authOutlineInputBorder,
                 focusedBorder: authOutlineInputBorder.copyWith(
@@ -109,7 +111,7 @@ class SignInForm extends StatelessWidget {
                     horizontal: 24,
                     vertical: 16,
                   ),
-                 suffix: SvgPicture.string(lockIcon),
+                  suffix: SvgPicture.string(lockIcon),
                   border: authOutlineInputBorder,
                   enabledBorder: authOutlineInputBorder,
                   focusedBorder: authOutlineInputBorder.copyWith(
@@ -136,7 +138,6 @@ class SignInForm extends StatelessWidget {
   }
 }
 
-
 class NoAccountText extends StatelessWidget {
   const NoAccountText({
     Key? key,
@@ -153,7 +154,12 @@ class NoAccountText extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () {
-            // Handle navigation to Sign Up
+            // Handle navigation to Sign Up\
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const HomeView(),
+                ));
           },
           child: const Text(
             "Sign Up",
@@ -166,4 +172,3 @@ class NoAccountText extends StatelessWidget {
     );
   }
 }
-
