@@ -1,4 +1,4 @@
-
+import 'package:chewie/chewie.dart';
 import 'package:education_media/ui/video/video_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
@@ -12,11 +12,18 @@ class VideoView extends StatefulWidget {
   State<VideoView> createState() => _VideoViewState();
 }
 
-class _VideoViewState extends State<VideoView> {
+class _VideoViewState extends State<VideoView> with WidgetsBindingObserver {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+
+    super.dispose();
   }
 
   @override
@@ -54,21 +61,53 @@ class _VideoViewState extends State<VideoView> {
                     // color: Colors.teal,
                     child: AspectRatio(
                       aspectRatio: controller.value.aspectRatio,
-                      child: VideoPlayer(controller),
+                      // child: VideoPlayer(controller),
+                      child: Chewie(controller: model.chewieController),
                     ),
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.play_arrow),
-                    onPressed: () {
-                      controller.play();
-                    },
+
+                  //  Row(
+                  //     children: [
+                  //       // Play Button
+                  //       IconButton(
+                  //         icon: Icon(model.videoPlayerController.value.isPlaying
+                  //             ? Icons.pause
+                  //             : Icons.play_arrow),
+                  //         onPressed: () {
+                  //           if (model.videoPlayerController.value.isPlaying) {
+                  //             model.videoPlayerController.pause();
+                  //           } else {
+                  //             model.videoPlayerController.play();
+                  //           }
+                  //         },
+                  //       ),
+                  //       // Current Time
+                  //       Text(_formatDuration(
+                  //           model.videoPlayerController.value.position)),
+                  //       // Progress Slider
+                  //       Expanded(
+                  //         child: Slider(
+                  //           value: model.videoPlayerController.value.position.inSeconds
+                  //               .toDouble(),
+                  //           max: model.videoPlayerController.value.duration.inSeconds
+                  //               .toDouble(),
+                  //           onChanged: (value) {
+                  //             model.videoPlayerController.seekTo(
+                  //               Duration(seconds: value.toInt()),
+                  //             );
+                  //           },
+                  //         ),
+                  //       ),
+                  //       // Total Duration
+                  //       Text(_formatDuration(
+                  //           model.videoPlayerController.value.duration)),
+                  //     ],
+                  //   ),
+
+                  const SizedBox(
+                    height: 15,
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.pause),
-                    onPressed: () {
-                      controller.pause();
-                    },
-                  ),
+
                   Expanded(
                     child: ListView.builder(
                       itemBuilder: (context, index) {
@@ -91,7 +130,9 @@ class _VideoViewState extends State<VideoView> {
                                 style: TextStyle(
                                     fontSize: 17,
                                     fontWeight: FontWeight.w600,
-                                    color: Colors.black),
+                                    color: Colors.white),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
                               ),
                               Text(
                                 '5:19 ',
@@ -113,4 +154,10 @@ class _VideoViewState extends State<VideoView> {
       viewModelBuilder: () => VideoViewmodel(),
     );
   }
+}
+
+// Helper function to format duration
+String _formatDuration(Duration duration) {
+  return "${duration.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
+      "${duration.inSeconds.remainder(60).toString().padLeft(2, '0')}";
 }
