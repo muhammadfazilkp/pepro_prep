@@ -1,9 +1,9 @@
-
+import 'package:education_media/ui/home/custom_scroller.dart';
 import 'package:education_media/ui/video/video_view.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:stacked/stacked.dart';
-import 'home_viewmodel.dart'; 
+import 'home_viewmodel.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -18,61 +18,21 @@ class HomeView extends StatelessWidget {
             child: Column(
               children: [
                 const SizedBox(height: 10),
-                const Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
+                Container(
+                  padding: const  EdgeInsets.only(right: 190),
+                  child: const  Text(
                     'hello Student Name',
-                    style: TextStyle(fontSize: 24, color: Colors.black),
+                    style: TextStyle(fontSize: 14, color: Colors.black),
                   ),
                 ),
                 const SizedBox(height: 20),
-                CarouselSlider(
-                  items: [
-                    Container(
-                      child: const Center(child: Text('Item 1')),
-                      decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(15)),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.circular(15)),
-                      child: const Center(child: Text('Item 2')),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.circular(15)),
-                      child: const Center(child: Text('Item 3')),
-                    ),
-                  ],
-                  options: CarouselOptions(
-                    height: 150,
-                    aspectRatio: 16 / 9,
-                    viewportFraction: 0.8,
-                    initialPage: 0,
-                    enableInfiniteScroll: true,
-                    reverse: false,
-                    autoPlay: true,
-                    autoPlayInterval: const Duration(seconds: 3),
-                    autoPlayAnimationDuration:
-                        const Duration(milliseconds: 800),
-                    autoPlayCurve: Curves.fastOutSlowIn,
-                    enlargeCenterPage: true,
-                    enlargeFactor: 0.3,
-                    onPageChanged: (index, reason) {
-                      viewModel.onPageChanged(index);
-                    },
-                    scrollDirection: Axis.horizontal,
-                  ),
-                ),
+                const CustomScroller(),
                 const SizedBox(height: 20),
                 Text(
                   'Current Page: ${viewModel.currentPage}',
                   style: const TextStyle(fontSize: 18, color: Colors.white),
                 ),
-                 Padding(
+                Padding(
                   padding: EdgeInsets.symmetric(horizontal: 17),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -84,8 +44,11 @@ class HomeView extends StatelessWidget {
                       InkWell(
                         onTap: () {
                           // navigationService.pushNamed(RoutePaths.videoView);/
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => VideoView(),));
-                          
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => VideoView(),
+                              ));
                         },
                         child: Text(
                           'View all ',
