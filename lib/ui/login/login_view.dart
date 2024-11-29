@@ -1,5 +1,4 @@
 import 'package:education_media/constants/app_constants.dart';
-import 'package:education_media/service/navigation_service.dart';
 import 'package:education_media/ui/home/home_view.dart';
 import 'package:education_media/ui/login/login_view_model.dart';
 import 'package:flutter/material.dart';
@@ -144,7 +143,7 @@ class SignInScreen extends StatelessWidget {
                         ),
                         SizedBox(
                             height: MediaQuery.of(context).size.height * 0.2),
-                        Row(
+                        const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [],
                         ),
