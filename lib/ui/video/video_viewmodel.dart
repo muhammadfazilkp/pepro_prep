@@ -18,9 +18,7 @@ class VideoViewmodel extends ChangeNotifier {
 
   Future<void> checkVideoPlatform() async {
     try {
-      videoPlayerController = VideoPlayerController.networkUrl(
-        Uri(path: 'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4')
-      );
+      videoPlayerController = VideoPlayerController.network('https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4');
       isVideoLoading = true;
       notifyListeners();
       _initializeVideoPlayerFuture = videoPlayerController.initialize();

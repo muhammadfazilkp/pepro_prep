@@ -1,4 +1,6 @@
+import 'package:education_media/constants/app_constants.dart';
 import 'package:education_media/ui/home/custom_scroller.dart';
+import 'package:education_media/ui/login/login_response_model.dart';
 import 'package:education_media/ui/video/video_view.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -6,7 +8,8 @@ import 'package:stacked/stacked.dart';
 import 'home_viewmodel.dart';
 
 class HomeView extends StatelessWidget {
-  const HomeView({super.key});
+ final LoginResponse? loginResponse;
+   HomeView({super.key,  this.loginResponse});
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +23,8 @@ class HomeView extends StatelessWidget {
                 const SizedBox(height: 10),
                 Container(
                   padding: const  EdgeInsets.only(right: 190),
-                  child: const  Text(
-                    'hello Student Name',
+                  child:   Text(
+                    'hello ${loginResponse!.fullName}',
                     style: TextStyle(fontSize: 14, color: Colors.black),
                   ),
                 ),

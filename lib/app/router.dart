@@ -11,12 +11,12 @@ class PageRouter {
     switch (settings.name) {
       case RoutePaths.splash:
         return MaterialPageRoute(
-          builder: (_) => const HomeView(),
+          builder: (_) =>  HomeView(),
           settings: settings,
         );
       case RoutePaths.homeView:
         return MaterialPageRoute(
-          builder: (_) => const HomeView(),
+          builder: (_) =>  HomeView(),
           settings: settings,
         );
 
