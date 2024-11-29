@@ -3,13 +3,16 @@ abstract class RoutePaths {
   static const String loginView = 'loginView';
   static const String homeView = '/homeview';
   static const String signUp = '/signUp';
-  static const String videoView='/videoview';
+  static const String videoView = '/videoview';
+  static const String login = '/login';
 }
 
 abstract class Gender {
   static const int woman = 0;
   static const int man = 1;
 }
+
+const BASE_URL='https://peproprep.edusuite.store/api/method/';
 
 const mailIcon =
     '''<svg width="18" height="13" viewBox="0 0 18 13" fill="none" xmlns="http://www.w3.org/2000/svg">

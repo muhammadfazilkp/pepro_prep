@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:education_media/constants/app_constants.dart';
+
 String getDeviceType() {
   String deviceType = '';
   if (Platform.isAndroid) {
@@ -22,6 +24,14 @@ String? validateEmail(String? value) {
   } else {
     return null;
   }
+}
+
+Uri buildBaseUrl(String endPoint) {
+  Uri url = Uri.parse(endPoint);
+  if (!endPoint.startsWith('http')) url = Uri.parse('$BASE_URL$endPoint');
+
+
+  return url;
 }
 
 
