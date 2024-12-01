@@ -25,10 +25,9 @@ class HomeView extends StatelessWidget {
               children: [
                 const SizedBox(height: 10),
                 Container(
-                  padding: const EdgeInsets.only(right: 190),
-                  child: const Text(
-                    // 'hello ${loginResponse!.fullName}',
-                    'fd',
+                  padding: const  EdgeInsets.only(right: 190),
+                  child:   Text(
+                    'hello',
                     style: const TextStyle(fontSize: 14, color: Colors.black),
                   ),
                 ),
