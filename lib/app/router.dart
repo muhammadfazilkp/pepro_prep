@@ -35,7 +35,9 @@ class PageRouter {
         return MaterialPageRoute(
             builder: (_) => const SignInScreen(), settings: settings);
       case RoutePaths.catogory:
-        return MaterialPageRoute(builder: (_)=>const CategoryView(),settings: settings );      
+        return MaterialPageRoute(
+            builder: (_) => const CategoryView(), settings: settings);
+            
 
       default:
         return MaterialPageRoute(

@@ -17,8 +17,8 @@ class SplashViewmodel extends ChangeNotifier {
       debugPrint('work Flow started');
       navigationService.pushNamed(RoutePaths.homeView);
     } else {
-      navigationService.pushNamed(RoutePaths.loginView);
-       debugPrint('ON Going login screen ');
+      navigationService.pushNamed(RoutePaths.login);
+      debugPrint('ON Going login screen ');
     }
 
     notifyListeners();
