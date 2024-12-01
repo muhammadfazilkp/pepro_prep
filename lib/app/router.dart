@@ -1,3 +1,4 @@
+import 'package:education_media/ui/catogory/catogory_view.dart';
 import 'package:education_media/ui/home/home_view.dart';
 import 'package:education_media/ui/login/login_view.dart';
 import 'package:education_media/ui/signup/sign_up_screen.dart';
@@ -33,6 +34,8 @@ class PageRouter {
       case RoutePaths.login:
         return MaterialPageRoute(
             builder: (_) => const SignInScreen(), settings: settings);
+      case RoutePaths.catogory:
+        return MaterialPageRoute(builder: (_)=>const CategoryView(),settings: settings );      
 
       default:
         return MaterialPageRoute(
