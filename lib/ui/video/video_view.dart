@@ -1,4 +1,4 @@
-import 'package:chewie/chewie.dart';
+// import 'package:chewie/chewie.dart';
 import 'package:education_media/ui/video/video_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
@@ -61,53 +61,52 @@ class _VideoViewState extends State<VideoView> with WidgetsBindingObserver {
                     // color: Colors.teal,
                     child: AspectRatio(
                       aspectRatio: controller.value.aspectRatio,
-                      // child: VideoPlayer(controller),
-                      child: Chewie(controller: model.chewieController),
+                      child: VideoPlayer(controller),
+                      // child: Chewie(controller: model.chewieController),
                     ),
                   ),
-
-                  //  Row(
-                  //     children: [
-                  //       // Play Button
-                  //       IconButton(
-                  //         icon: Icon(model.videoPlayerController.value.isPlaying
-                  //             ? Icons.pause
-                  //             : Icons.play_arrow),
-                  //         onPressed: () {
-                  //           if (model.videoPlayerController.value.isPlaying) {
-                  //             model.videoPlayerController.pause();
-                  //           } else {
-                  //             model.videoPlayerController.play();
-                  //           }
-                  //         },
-                  //       ),
-                  //       // Current Time
-                  //       Text(_formatDuration(
-                  //           model.videoPlayerController.value.position)),
-                  //       // Progress Slider
-                  //       Expanded(
-                  //         child: Slider(
-                  //           value: model.videoPlayerController.value.position.inSeconds
-                  //               .toDouble(),
-                  //           max: model.videoPlayerController.value.duration.inSeconds
-                  //               .toDouble(),
-                  //           onChanged: (value) {
-                  //             model.videoPlayerController.seekTo(
-                  //               Duration(seconds: value.toInt()),
-                  //             );
-                  //           },
-                  //         ),
-                  //       ),
-                  //       // Total Duration
-                  //       Text(_formatDuration(
-                  //           model.videoPlayerController.value.duration)),
-                  //     ],
-                  //   ),
-
+                  Row(
+                    children: [
+                      // Play Button
+                      IconButton(
+                        icon: Icon(model.videoPlayerController.value.isPlaying
+                            ? Icons.pause
+                            : Icons.play_arrow),
+                        onPressed: () {
+                          if (model.videoPlayerController.value.isPlaying) {
+                            model.videoPlayerController.pause();
+                          } else {
+                            model.videoPlayerController.play();
+                          }
+                        },
+                      ),
+                      // Current Time
+                      Text(_formatDuration(
+                          model.videoPlayerController.value.position)),
+                      // Progress Slider
+                      Expanded(
+                        child: Slider(
+                          value: model
+                              .videoPlayerController.value.position.inSeconds
+                              .toDouble(),
+                          max: model
+                              .videoPlayerController.value.duration.inSeconds
+                              .toDouble(),
+                          onChanged: (value) {
+                            model.videoPlayerController.seekTo(
+                              Duration(seconds: value.toInt()),
+                            );
+                          },
+                        ),
+                      ),
+                      // Total Duration
+                      Text(_formatDuration(
+                          model.videoPlayerController.value.duration)),
+                    ],
+                  ),
                   const SizedBox(
                     height: 15,
                   ),
-
                   Expanded(
                     child: ListView.builder(
                       itemBuilder: (context, index) {

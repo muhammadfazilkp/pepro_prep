@@ -1,14 +1,30 @@
+import 'package:education_media/models/coursemodel.dart';
+import 'package:education_media/service/apiservice.dart';
+import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
 class HomeViewmodel extends BaseViewModel {
-  List<String> static = ['abc ', 'dsd', 'dfd'];
+  HomeViewmodel({
+    required Apiservice,
+  }) : _apiservice = Apiservice;
+  Coureses? coureses;
+  // final LoginResponse loginResponse
+  final Apiservice _apiservice;
 
-  int _currentPage = 0;
+  void init(){
+    getUserDetails();
+  }
 
-  int get currentPage => _currentPage;
-
-  void onPageChanged(int index) {
-    _currentPage = index;
-    notifyListeners();
+  void getUserDetails(
+      ) async {
+    try {
+      final courseData = await _apiservice.fetchCourseData(
+        apikey: 'apikey',
+        secretKey: 'secretKey',
+      );
+      debugPrint("Course Data: ${courseData.data?.title}");
+    } catch (e) {
+      debugPrint("Error fetching course data: $e");
+    }
   }
 }
