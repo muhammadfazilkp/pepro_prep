@@ -29,7 +29,7 @@ class HomeView extends StatelessWidget {
                   child: const Text(
                     // 'hello ${loginResponse!.fullName}',
                     'fd',
-                    style: TextStyle(fontSize: 14, color: Colors.black),
+                    style: const TextStyle(fontSize: 14, color: Colors.black),
                   ),
                 ),
                 const SizedBox(height: 20),

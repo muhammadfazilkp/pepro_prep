@@ -1,5 +1,7 @@
 import 'package:education_media/ui/splash_screen/splash_viewmodel.dart';
+import 'package:education_media/ui/splash_screen/splash_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked.dart';
 
 class Splashview extends StatelessWidget {
