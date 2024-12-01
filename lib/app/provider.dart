@@ -1,5 +1,7 @@
 import 'package:education_media/service/apiservice.dart';
 import 'package:education_media/ui/catogory/catogory_view_model.dart';
+import 'package:education_media/ui/chapters/chapter_veiwmodel.dart';
+import 'package:education_media/ui/lessons/lessons_viewmodel.dart';
 import 'package:education_media/ui/login/login_view_model.dart';
 import 'package:education_media/ui/splash_screen/splash_viewmodel.dart';
 import 'package:education_media/ui/splash_screen/splash_viewmodel.dart';
@@ -21,7 +23,11 @@ List<SingleChildWidget> independentServices = [
   ),
   ChangeNotifierProvider(
     create: (context) => Apiservice(),
-  )
+  ),
+
+  ChangeNotifierProvider(create: (context)=>ChapterVeiwmodel()),
+    ChangeNotifierProvider(create: (context)=>LessonsViewmodel())
+
 ]; 
 
 List<SingleChildWidget> dependentServices = [

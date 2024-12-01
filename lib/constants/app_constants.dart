@@ -6,6 +6,11 @@ abstract class RoutePaths {
   static const String videoView = '/videoview';
   static const String login = '/login';
   static const String catogory='/catogory';
+  static const String chapter='/chapter';
+    static const String lessons='/lessons';
+
+
+
 }
 
 abstract class Gender {
