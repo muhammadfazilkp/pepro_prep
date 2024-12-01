@@ -1,19 +1,22 @@
-import 'package:education_media/constants/app_constants.dart';
+import 'package:education_media/service/apiservice.dart';
 import 'package:education_media/ui/home/custom_scroller.dart';
 import 'package:education_media/ui/login/login_response_model.dart';
 import 'package:education_media/ui/video/video_view.dart';
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:provider/provider.dart';
 import 'package:stacked/stacked.dart';
 import 'home_viewmodel.dart';
 
 class HomeView extends StatelessWidget {
- final LoginResponse? loginResponse;
-   HomeView({super.key,  this.loginResponse});
+//  final LoginResponse? loginResponse;
+  HomeView({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<HomeViewmodel>.reactive(
+      onViewModelReady: (model) => model.init(),
       builder: (context, viewModel, child) {
         return Scaffold(
           backgroundColor: Colors.white,
@@ -22,9 +25,10 @@ class HomeView extends StatelessWidget {
               children: [
                 const SizedBox(height: 10),
                 Container(
-                  padding: const  EdgeInsets.only(right: 190),
-                  child:   Text(
-                    'hello ${loginResponse!.fullName}',
+                  padding: const EdgeInsets.only(right: 190),
+                  child: const Text(
+                    // 'hello ${loginResponse!.fullName}',
+                    'fd',
                     style: TextStyle(fontSize: 14, color: Colors.black),
                   ),
                 ),
@@ -32,7 +36,7 @@ class HomeView extends StatelessWidget {
                 const CustomScroller(),
                 const SizedBox(height: 20),
                 Text(
-                  'Current Page: ${viewModel.currentPage}',
+                  'Current Page: ',
                   style: const TextStyle(fontSize: 18, color: Colors.white),
                 ),
                 Padding(
@@ -210,7 +214,7 @@ class HomeView extends StatelessWidget {
           ),
         );
       },
-      viewModelBuilder: () => HomeViewmodel(),
+      viewModelBuilder: () => HomeViewmodel(Apiservice: Provider.of<Apiservice>(context)),
     );
   }
 }

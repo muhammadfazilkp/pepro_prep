@@ -1,6 +1,7 @@
 import 'package:education_media/ui/home/home_view.dart';
 import 'package:education_media/ui/login/login_view.dart';
 import 'package:education_media/ui/signup/sign_up_screen.dart';
+import 'package:education_media/ui/splash_screen/splashview.dart';
 import 'package:education_media/ui/video/video_view.dart';
 import 'package:flutter/material.dart';
 
@@ -11,12 +12,12 @@ class PageRouter {
     switch (settings.name) {
       case RoutePaths.splash:
         return MaterialPageRoute(
-          builder: (_) =>  HomeView(),
+          builder: (_) => const Splashview(),
           settings: settings,
         );
       case RoutePaths.homeView:
         return MaterialPageRoute(
-          builder: (_) =>  HomeView(),
+          builder: (_) => HomeView(),
           settings: settings,
         );
 

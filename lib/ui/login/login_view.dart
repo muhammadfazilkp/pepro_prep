@@ -19,7 +19,7 @@ class SignInScreen extends StatelessWidget {
         context,
         MaterialPageRoute(
           builder: (context) => HomeView(
-            loginResponse: viewmodel.loginResponse!,
+            // loginResponse: viewmodel.loginResponse!,
           ),
         ),
       );
@@ -42,12 +42,15 @@ class SignInScreen extends StatelessWidget {
                     child: Column(
                       children: [
                         const SizedBox(height: 16),
-                        const Text(
-                          "Welcome Back",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
+                        InkWell(
+                          onTap: () =>  Navigator.push(context,MaterialPageRoute(builder: (context) => HomeView(),)),
+                          child: const Text(
+                            "Welcome Back",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                         const SizedBox(height: 8),

@@ -16,7 +16,7 @@ class LoginViewModel extends ChangeNotifier {
   bool _isLoading = false;
   bool _isLoggedIn = false;
   String? _errorMessage;
-LoginResponse? _loginResponse;
+  LoginResponse? _loginResponse;
 
   bool get isLoading => _isLoading;
   bool get isLoggedIn => _isLoggedIn;
@@ -33,7 +33,7 @@ LoginResponse? _loginResponse;
 
   // Login function
   Future<void> login() async {
-    Uri url =buildBaseUrl('rest_auth.rest_auth.api.auth.login');
+    Uri url = buildBaseUrl('rest_auth.rest_auth.api.auth.login');
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
@@ -47,13 +47,13 @@ LoginResponse? _loginResponse;
         },
       );
 
-      if (response.statusCode == 200){
-        final responsedata=jsonDecode(response.body);
-         _loginResponse=LoginResponse.fromJson(responsedata);
+      if (response.statusCode == 200) {
+        final responsedata = jsonDecode(response.body);
+        _loginResponse = LoginResponse.fromJson(responsedata);
+        _isLoggedIn = true;
 
-         final prefs = await SharedPreferences.getInstance();
-         await prefs.setBool("isLoggedin", true);
-        _isLoggedIn = true; 
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool("isLoggedin", true);
       } else {
         final error = jsonDecode(response.body);
         _errorMessage = error['message'] ?? 'An error occurred';

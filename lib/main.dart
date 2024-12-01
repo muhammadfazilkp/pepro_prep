@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
             );
           },
           debugShowCheckedModeBanner: false,
-          initialRoute: RoutePaths.login,
+          initialRoute: RoutePaths.splash,
           onGenerateRoute: PageRouter.generateRoute,
           navigatorKey: NavigationService.navigationKey,
         ),
