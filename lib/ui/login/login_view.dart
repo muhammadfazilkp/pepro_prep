@@ -1,4 +1,5 @@
 import 'package:education_media/constants/app_constants.dart';
+import 'package:education_media/ui/catogory/catogory_view.dart';
 import 'package:education_media/ui/home/home_view.dart';
 import 'package:education_media/ui/login/login_view_model.dart';
 import 'package:flutter/material.dart';
@@ -17,9 +18,7 @@ class SignInScreen extends StatelessWidget {
                   Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => HomeView(
-            // loginResponse: viewmodel.loginResponse!,
-          ),
+          builder: (context) =>HomeView()
         ),
       );
             }
