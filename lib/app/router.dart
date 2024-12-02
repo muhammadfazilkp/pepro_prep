@@ -1,6 +1,4 @@
 import 'package:education_media/ui/catogory/catogory_view.dart';
-import 'package:education_media/ui/chapters/chapter_view.dart';
-import 'package:education_media/ui/home/home_view.dart';
 import 'package:education_media/ui/lessons/lessons_list_view.dart';
 import 'package:education_media/ui/login/login_view.dart';
 import 'package:education_media/ui/signup/sign_up_screen.dart';
@@ -18,11 +16,11 @@ class PageRouter {
           builder: (_) => const Splashview(),
           settings: settings,
         );
-      case RoutePaths.homeView:
-        return MaterialPageRoute(
-          builder: (_) => HomeView(),
-          settings: settings,
-        );
+      // case RoutePaths.homeView:
+      //   return MaterialPageRoute(
+      //     builder: (_) => HomeView(),
+      //     settings: settings,
+      //   );
 
       case RoutePaths.signUp:
         return MaterialPageRoute(
@@ -30,17 +28,21 @@ class PageRouter {
 
       case RoutePaths.videoView:
         return MaterialPageRoute(
-          builder: (context) => const VideoView(),
+          builder: (context) => const VideoView(
+            videoUrl: '',
+          ),
           settings: settings,
         );
       case RoutePaths.login:
         return MaterialPageRoute(
             builder: (_) => const SignInScreen(), settings: settings);
       case RoutePaths.catogory:
-        return MaterialPageRoute(builder: (_)=>const CategoryView(),settings: settings); 
-      
+        return MaterialPageRoute(
+            builder: (_) => const CategoryView(), settings: settings);
+
       case RoutePaths.lessons:
-          return MaterialPageRoute(builder: (_)=> LessonGridView(),settings: settings);        
+        return MaterialPageRoute(
+            builder: (_) => LessonGridView(), settings: settings);
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(
