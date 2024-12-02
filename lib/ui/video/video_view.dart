@@ -84,6 +84,7 @@ class VideoViewState extends State<VideoView> with WidgetsBindingObserver {
         //     Text(_formatDuration(_controller.value.duration)),
         //   ],
         // ),
+        //print('dfdfd')//
       ],
     );
   }
