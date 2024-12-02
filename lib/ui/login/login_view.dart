@@ -18,7 +18,7 @@ class SignInScreen extends StatelessWidget {
                   Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) =>CategoryView()
+          builder: (context) =>HomeView()
         ),
       );
             }

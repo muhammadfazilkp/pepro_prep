@@ -51,6 +51,11 @@ class LoginViewModel extends ChangeNotifier {
         final responsedata = jsonDecode(response.body);
         _loginResponse = LoginResponse.fromJson(responsedata);
         _isLoggedIn = true;
+        getUserKeys(
+            loginKey: _loginResponse!.keyDetails.apiKey,
+            loginSecretKey: _loginResponse!.keyDetails.apiSecret);
+        debugPrint('loginKey : ${_loginResponse!.keyDetails.apiKey}');
+        debugPrint('SecretKey : ${_loginResponse!.keyDetails.apiSecret}');
 
         final prefs = await SharedPreferences.getInstance();
         await prefs.setBool("isLoggedin", true);
@@ -64,5 +69,13 @@ class LoginViewModel extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  void getUserKeys(
+      {required String loginKey, required String loginSecretKey}) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString("loginKey", loginKey);
+    pref.setString("loginSecretKey", loginSecretKey);
+    notifyListeners();
   }
 }

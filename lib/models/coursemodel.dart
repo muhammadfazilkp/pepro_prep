@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
+
 class Coureses {
   Data? data;
 
@@ -36,25 +40,29 @@ class Data {
   String? fileType;
   String? doctype;
 
-  Data(
-      {this.name,
-      this.owner,
-      this.creation,
-      this.modified,
-      this.modifiedBy,
-      this.docstatus,
-      this.idx,
-      this.title,
-      this.includeInPreview,
-      this.chapter,
-      this.isScormPackage,
-      this.course,
-      this.content,
-      this.body,
-      this.instructorContent,
-      this.instructorNotes,
-      this.fileType,
-      this.doctype});
+  // To store video URLs found in content
+  List<String> videoUrls = [];
+
+  Data({
+    this.name,
+    this.owner,
+    this.creation,
+    this.modified,
+    this.modifiedBy,
+    this.docstatus,
+    this.idx,
+    this.title,
+    this.includeInPreview,
+    this.chapter,
+    this.isScormPackage,
+    this.course,
+    this.content,
+    this.body,
+    this.instructorContent,
+    this.instructorNotes,
+    this.fileType,
+    this.doctype,
+  });
 
   Data.fromJson(Map<String, dynamic> json) {
     name = json["name"];
@@ -75,6 +83,11 @@ class Data {
     instructorNotes = json["instructor_notes"];
     fileType = json["file_type"];
     doctype = json["doctype"];
+
+    // Parse the content field (which is a JSON string)
+    if (content != null) {
+      parseContent(content!);
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -97,5 +110,29 @@ class Data {
     data["file_type"] = fileType;
     data["doctype"] = doctype;
     return data;
+  }
+
+  // Parse the content field to extract video URLs
+  void parseContent(String contentJson) {
+    try {
+      // Parse the content JSON string
+      Map<String, dynamic> contentMap = json.decode(contentJson);
+
+      // Loop through the blocks to extract video URLs from the "upload" type blocks
+      List blocks = contentMap['blocks'] ?? [];
+      for (var block in blocks) {
+        if (block['type'] == 'upload') {
+          var fileUrl = block['data']['file_url'];
+          var fileType = block['data']['file_type'];
+
+          // If file is a video (MP4 type), add the URL to the videoUrls list
+          if (fileType != null && fileType == 'MP4') {
+            videoUrls.add(fileUrl ?? '');
+          }
+        }
+      }
+    } catch (e) {
+      debugPrint("Error parsing content JSON: $e");
+    }
   }
 }

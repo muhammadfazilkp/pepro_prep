@@ -28,30 +28,22 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  appinio_video_player: ^1.2.2
+  cached_network_image: ^3.4.1
+  carousel_slider: ^5.0.0
   cupertino_icons: ^1.0.6
+  device_info_plus: ^10.1.0
   flutter:
     sdk: flutter
-
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  provider: ^6.1.2
-  carousel_slider: ^5.0.0
-  stacked: ^3.4.3
-  cached_network_image: ^3.4.1
-  video_player: ^2.9.2
-  flutter_svg: ^2.0.15
   flutter_screenutil: ^5.9.3
-  appinio_video_player: ^1.2.2
-  # chewie: ^1.8.5
+  flutter_svg: ^2.0.15
+  provider: ^6.1.2
   shared_preferences: ^2.3.3
+  stacked: ^3.4.3
+  syncfusion_flutter_pdfviewer: ^27.2.4
+  video_player: ^2.9.2
 
 dev_dependencies:
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
   flutter_lints: ^3.0.0
   flutter_test:
     sdk: flutter
