@@ -1,9 +1,12 @@
+
+import 'package:education_media/service/apiservice.dart';
 import 'package:education_media/ui/catogory/catogory_view_model.dart';
 import 'package:education_media/ui/chapters/chapter_view.dart';
+import 'package:education_media/widgets/diologs.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:stacked/stacked.dart';
-
-
 
 class CategoryView extends StatelessWidget {
   const CategoryView({Key? key}) : super(key: key);
@@ -11,13 +14,29 @@ class CategoryView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<CatogoryViewModel>.reactive(
-      viewModelBuilder: () => CatogoryViewModel(),
+      onViewModelReady: (viewModel) => viewModel.getsecretKey(),
+      viewModelBuilder: () =>
+          CatogoryViewModel(apiservice: Provider.of<Apiservice>(context)),
       builder: (context, viewModel, child) {
         return DefaultTabController(
           length: 6, // Number of tabs
           child: Scaffold(
             appBar: AppBar(
-              title: const Text('Categories'),
+              automaticallyImplyLeading: false,
+              //  title: const Text('User Name'),
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  
+                  child: InkWell(
+                    onTap: () => showLogoutDialog(context, () {
+                      viewModel.logOut(context);
+                    }),
+                    // onTap:() => viewModel.logOut(context),
+                    child: const Icon(Icons.logout ),
+                  ),
+                )
+              ],
               bottom: const TabBar(
                 isScrollable: true,
                 tabs: [
@@ -32,11 +51,11 @@ class CategoryView extends StatelessWidget {
             ),
             body: TabBarView(
               children: [
-               LiveGridView(), // Live tab content
+                LiveGridView(), // Live tab content
                 Center(child: Text('New content')), // Placeholder for 'New'
-                const Center(child: Text('Upcoming content')), 
-                Center(child: Text('Enrolled content')), 
-                Center(child: Text('Created content')), 
+                const Center(child: Text('Upcoming content')),
+                Center(child: Text('Enrolled content')),
+                Center(child: Text('Created content')),
                 Center(child: Text('Under Review content'))
               ],
             ),
@@ -46,11 +65,14 @@ class CategoryView extends StatelessWidget {
     );
   }
 }
+
 class LiveGridView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<CatogoryViewModel>.reactive(
-      viewModelBuilder: () => CatogoryViewModel()..fetchLiveCourses(),
+      viewModelBuilder: () =>
+          CatogoryViewModel(apiservice: Provider.of<Apiservice>(context))
+            ..fetchLiveCourses(),
       builder: (context, viewModel, child) {
         if (viewModel.isLoading) {
           return const Center(child: CircularProgressIndicator());
@@ -69,7 +91,7 @@ class LiveGridView extends StatelessWidget {
           itemBuilder: (context, index) {
             final course = viewModel.liveCourses[index];
             return InkWell(
-              onTap: (){
+              onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -78,7 +100,6 @@ class LiveGridView extends StatelessWidget {
                 );
               },
               child: Card(
-                
                 elevation: 4,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -27,6 +27,7 @@ class SignInScreen extends StatelessWidget {
           return Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
+              automaticallyImplyLeading: false,
               backgroundColor: Colors.white,
               title: const Text("Sign In"),
             ),

@@ -1,12 +1,11 @@
 import 'package:education_media/app/utils.dart';
 import 'package:education_media/ui/login/login_response_model.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:stacked/stacked.dart';
-
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+
+import '../chapters/chapter_veiwmodel.dart';
 
 class LoginViewModel extends ChangeNotifier {
   // TextEditingControllers for email and password
