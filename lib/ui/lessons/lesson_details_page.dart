@@ -122,17 +122,37 @@ class LessonDetailsPage extends StatelessWidget {
           Text("");
         }
         break;
-      case 'list':
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: block.listItems.map((item) => Text('• $item')).toList(),
-        );
-      case 'codeBox':
-        return Container(
-          color: Colors.grey[200],
-          padding: const EdgeInsets.all(8.0),
-          child: Text(block.code),
-        );
+      case 'quiz':
+  if (block.data.containsKey('quiz')) {
+    final quizzes = block.data['quiz'];
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        // Display quiz name(s), whether single or multiple.
+        if (quizzes is List)
+          ...quizzes.map<Widget>((quiz) => Text(
+                quiz.toString(), // Display each quiz name or identifier.
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ))
+        else
+          Text(
+            quizzes.toString(), // Display the single quiz name.
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+        const SizedBox(height: 10),
+        // Unified "Start Now" button
+        ElevatedButton(
+          onPressed: () {
+            // Add navigation or functionality to start the quiz here.
+            print("Starting quiz");
+          },
+          child: const Text('Start Now',style: TextStyle(color: Colors.blue),),
+        ),
+      ],
+    );
+  }
+  return const SizedBox.shrink(); // If 'quiz' key is missing or empty.
+  
       default:
         return SizedBox.shrink();
     }
