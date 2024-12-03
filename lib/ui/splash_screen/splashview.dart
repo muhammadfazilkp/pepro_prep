@@ -10,10 +10,15 @@ class Splashview extends StatelessWidget {
     return ViewModelBuilder<SplashViewmodel>.reactive(
       onViewModelReady: (model) => model.checkLoginStatus(),
       builder: (context, model, child) {
-        return const Scaffold(
-          body: Column(
-            children: [Center(child: Text("Splash Screen"))],
-          ),
+        return Scaffold(
+          body: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      decoration: const BoxDecoration(
+          
+            ),
+            child: const  Text('Spalsh screen'),
+                    ),
         );
       },
       viewModelBuilder: () => SplashViewmodel(),
