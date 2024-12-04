@@ -3,7 +3,6 @@ import 'package:education_media/service/navigation_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class SplashViewmodel extends ChangeNotifier {
   bool _isLoggedIn = false;
 
@@ -18,7 +17,7 @@ class SplashViewmodel extends ChangeNotifier {
       navigationService.pushNamedAndRemoveUntil(RoutePaths.catogory);
     } else {
       navigationService.pushNamedAndRemoveUntil(RoutePaths.login);
-       debugPrint('ON Going login screen ');
+      debugPrint('ON Going login screen ');
     }
 
     notifyListeners();

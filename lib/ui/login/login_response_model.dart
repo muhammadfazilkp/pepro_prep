@@ -46,7 +46,7 @@ class KeyDetails {
 class UserDetails {
   final String name;
   final String firstName;
-  final String lastName;
+  final String? lastName;
   final String email;
   final String? mobileNo;
   final String? gender;
