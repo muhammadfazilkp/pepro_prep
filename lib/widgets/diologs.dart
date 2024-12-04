@@ -1,8 +1,8 @@
-import 'package:education_media/constants/app_constants.dart';
-import 'package:education_media/service/navigation_service.dart';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
-void showLogoutDialog(BuildContext context, Function onLogoutConfirmed) {
+void showLogoutDialog(BuildContext context,  VoidCallback onLogoutConfirmed) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -18,8 +18,8 @@ void showLogoutDialog(BuildContext context, Function onLogoutConfirmed) {
           ),
           TextButton(
             onPressed: () {
-             navigationService.pushNamedAndRemoveUntil(RoutePaths.login);
-              onLogoutConfirmed();
+              Navigator.of(context).pop();
+            onLogoutConfirmed();
             },
             child: const Text('Yes'),
           ),

@@ -1,6 +1,7 @@
 import 'package:education_media/app/utils.dart';
 import 'package:education_media/constants/app_constants.dart';
 import 'package:education_media/service/apiservice.dart';
+import 'package:education_media/service/navigation_service.dart';
 import 'package:flutter/material.dart';
 
 import 'dart:convert';
@@ -39,11 +40,12 @@ class CatogoryViewModel extends ChangeNotifier {
   Future<void> logOut(BuildContext context) async {
     try {
       await _apiservice.logout(key.toString(), secretKey.toString());
+      debugPrint('Key: $key : SecretKey: $secretKey');
 
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text('Logout successful')));
       removUserprf();
-      Navigator.pushReplacementNamed(context, RoutePaths.login);
+       navigationService.pushNamedAndRemoveUntil(RoutePaths.login);
     } catch (e) {
       debugPrint('Error during logout: $e');
       ScaffoldMessenger.of(context)
@@ -54,6 +56,8 @@ class CatogoryViewModel extends ChangeNotifier {
   void removUserprf() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     pref.remove('isLoggedin');
+    key=null;
+    secretKey=null;
     notifyListeners();
   }
 
