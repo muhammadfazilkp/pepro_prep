@@ -76,6 +76,7 @@ class LessonDetailsPage extends StatelessWidget {
     return ViewModelBuilder<LessonDetailsViewModel>.reactive(
       viewModelBuilder: () =>
           LessonDetailsViewModel()..fetchLessonDetails(lessonName),
+          // onViewModelReady: (viewModel) => viewModel.init(),
       builder: (context, viewModel, child) {
         if (viewModel.isLoading) {
           return const Scaffold(

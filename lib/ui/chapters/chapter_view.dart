@@ -1,8 +1,7 @@
-import 'package:education_media/ui/catogory/catogory_view_model.dart';
+import 'package:education_media/app/images.dart';
 import 'package:education_media/ui/chapters/chapter_veiwmodel.dart';
 import 'package:education_media/ui/lessons/lessons_list_view.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:stacked/stacked.dart';
 
 class ChapterView extends StatelessWidget {
@@ -52,6 +51,17 @@ class ChapterView extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
+                              leading:Container(
+                                                            height: 50, 
+                                                            width: 50,
+                                                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: AssetImage(chapterImage), // Replace with your asset
+                                fit: BoxFit.cover,
+                              ),
+                                                            ),
+                                                          ) ,
                             ),
                           ),
                         );

@@ -48,6 +48,7 @@ class LoginViewModel extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         final responsedata = jsonDecode(response.body);
+        print(responsedata);
         _loginResponse = LoginResponse.fromJson(responsedata);
         _isLoggedIn = true;
         getUserKeys(

@@ -1,13 +1,20 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:education_media/models/lesson_details_model.dart';
 import 'package:education_media/ui/lessons/lesson_details_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:http/http.dart'as http;
 class LessonDetailsViewModel extends ChangeNotifier {
   bool isLoading = true;
   LessonDetails? lessonDetails;
 
+
+
+void init ()async{
+_disableScreenshot();
+}
   Future<void> fetchLessonDetails(String lessonName) async {
     String encodedLessonName = Uri.encodeComponent(lessonName);
     final Uri url = Uri.parse(
@@ -41,4 +48,14 @@ class LessonDetailsViewModel extends ChangeNotifier {
     isLoading = false;
     notifyListeners();
   }
+
+  Future<void> _disableScreenshot() async {
+  if (Platform.isAndroid) {
+    try {
+      await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+    } catch (e) {
+      debugPrint('Error disabling screenshots: $e');
+    }
+  }
+}
 }

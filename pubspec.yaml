@@ -29,6 +29,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   appinio_video_player: ^1.2.2
+  auto_size_text: ^3.0.0
   cached_network_image: ^3.4.1
   carousel_slider: ^5.0.0
   chewie: ^1.8.5
@@ -39,12 +40,13 @@ dependencies:
   flutter_screenutil: ^5.9.3
   flutter_svg: ^2.0.15
   flutter_windowmanager: ^0.2.0
+  html: ^0.15.0
   provider: ^6.1.2
   shared_preferences: ^2.3.3
   stacked: ^3.4.3
   syncfusion_flutter_pdfviewer: ^27.2.4
   video_player: ^2.9.2
-  
+
 dev_dependencies:
   flutter_lints: ^3.0.0
   flutter_test:
@@ -62,6 +64,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
+    - assets/images/
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

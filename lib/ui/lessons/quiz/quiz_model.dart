@@ -3,6 +3,7 @@ class QuizResponse {
   final String name;
   final String title;
   final int totalMarks;
+  final double duration;
   final List<QuizQuestion> questions;
 
   QuizResponse({
@@ -10,6 +11,7 @@ class QuizResponse {
     required this.title,
     required this.totalMarks,
     required this.questions,
+    required this.duration
   });
 
   factory QuizResponse.fromJson(Map<String, dynamic> json) {
@@ -17,6 +19,7 @@ class QuizResponse {
       name: json['name'],
       title: json['title'],
       totalMarks: json['total_marks'],
+      duration: json['duration'],
       questions: (json['questions'] as List)
           .map((question) => QuizQuestion.fromJson(question))
           .toList(),

@@ -82,6 +82,7 @@
     
 //      }}
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:education_media/ui/lessons/quiz/quiz_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart'; // Import the stacked package for ViewModelBuilder
@@ -94,7 +95,7 @@ class QuizPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<QuizViewModel>.reactive(
-      viewModelBuilder: () => QuizViewModel()..loadQuiz(quizName),
+      viewModelBuilder: () => QuizViewModel()..loadQuiz(quizName,context),
       builder: (context, viewModel, child) {
         if (viewModel.currentQuestionDetails == null) {
           return const Scaffold(
@@ -113,10 +114,10 @@ class QuizPage extends StatelessWidget {
             title: const Text('Quiz'),
           ),
           body: Padding(
-            padding: const EdgeInsets.only(left: 16),
+            padding:  EdgeInsets.only(left: 16),
             child: Column(
               children: [
-                
+            
                 Container(
                   decoration: BoxDecoration(border: Border.all(width: 0.5),borderRadius: BorderRadius.circular(12)),
                 height: height,
@@ -147,17 +148,23 @@ class QuizPage extends StatelessWidget {
                         ],),
                       )
                      ,
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        Padding(
+                        padding:  EdgeInsets.all(8.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(top: 27),
+                              padding:  EdgeInsets.only(top: 27),
+
+                              
                               child: Text(
-                                questionDetails.question,
-                                style: const TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                                        '${viewModel.parseHtmlstring(questionDetails.question)}?',
+                                // 'This is a long text that you want to display in just two lines. If the text exceeds two lines, it will be truncated.',
+                              
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                                    maxLines: 2,
+                                  
                               ),
                             ),
                          
@@ -180,7 +187,7 @@ class QuizPage extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8), // Match the radius here
       ),
-      title: Text(option.text),
+      title: Text(option.text,style: TextStyle(fontSize: 15),),
       value: option.text,
       groupValue: viewModel.selectedOption,
       onChanged: viewModel.isAnswered
@@ -218,23 +225,51 @@ class QuizPage extends StatelessWidget {
                             ),
                             const SizedBox(height: 10),
                             // Next Question or Submit Quiz
-                            ElevatedButton(
-                              onPressed: viewModel.currentQuestionIndex <
-                                      quiz.questions.length - 1
-                                  ? () => viewModel.nextQuestion()
-                                  : () => viewModel.submitQuiz(),
-                              child: Text(
-                                viewModel.currentQuestionIndex <
-                                        quiz.questions.length - 1
-                                    ? 'Next Question'
-                                    : 'Submit Quiz',
-                              ),
-                            ),
+                          //   ElevatedButton(
+                          //     // onPressed: viewModel.currentQuestionIndex <
+                          //     //         quiz.questions.length - 1
+                          //     //     ? () => viewModel.nextQuestion()
+                          //     //     : () => viewModel.submitQuiz(),
+                          //     // child: Text(
+                          //     //   viewModel.currentQuestionIndex <
+                          //     //           quiz.questions.length - 1
+                          //     //       ? 'Next Question'
+                          //     //       : 'Submit Quiz',
+                          //     // ),
+
+                          // child: const Text('Next Question'),
+                          //     )
+                        if (!viewModel.isAnswered)
+                  ElevatedButton(
+                    onPressed: viewModel.selectedOption == null
+                        ? null
+                        : () => viewModel.checkAnswer(),
+                    child: const Text('Check'),
+                  ),
+                if (viewModel.isAnswered)
+                  ElevatedButton(
+                    onPressed: viewModel.currentQuestionIndex <
+                            quiz.questions.length - 1
+                        ? () => viewModel.nextQuestion()
+                        : () => viewModel.submitQuiz(context),
+                    child: Text(
+                      viewModel.currentQuestionIndex <
+                              quiz.questions.length - 1
+                          ? 'Next Question'
+                          : 'Submit Now',
+                    ),
+                  ),
                           ],
                         ),
                     ],
                   ),
                 ),
+                    LinearProgressIndicator(
+                value:quiz.duration>0? viewModel.remainingTime / (quiz.duration * 60):0.0,
+                minHeight: 5,
+                backgroundColor: Colors.grey[300],
+                color: Colors.blue,
+              ),
               ],
             ),
           ),

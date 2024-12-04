@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:education_media/ui/catogory/catogory_view_model.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:http/http.dart' as http;
@@ -60,9 +61,17 @@ class ChapterVeiwmodel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> _disableScreenshot() async {
-    await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+
+Future<void> _disableScreenshot() async {
+  if (Platform.isAndroid) {
+    try {
+      await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+    } catch (e) {
+      debugPrint('Error disabling screenshots: $e');
+    }
   }
+}
+
    Future<void> _enableScreenshot() async {
     await FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
   }
