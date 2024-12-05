@@ -82,10 +82,10 @@
     
 //      }}
 
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:education_media/ui/lessons/quiz/quiz_viewmodel.dart';
+// iimport 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
-import 'package:stacked/stacked.dart'; // Import the stacked package for ViewModelBuilder
+import 'package:stacked/stacked.dart';
+import 'quiz_viewmodel.dart';
 
 class QuizPage extends StatelessWidget {
   final String quizName;
@@ -95,7 +95,7 @@ class QuizPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<QuizViewModel>.reactive(
-      viewModelBuilder: () => QuizViewModel()..loadQuiz(quizName,context),
+      viewModelBuilder: () => QuizViewModel()..loadQuiz(quizName, context),
       builder: (context, viewModel, child) {
         if (viewModel.currentQuestionDetails == null) {
           return const Scaffold(
@@ -106,114 +106,97 @@ class QuizPage extends StatelessWidget {
 
         final questionDetails = viewModel.currentQuestionDetails!;
         final quiz = viewModel.quiz;
-        final mediaQuery=MediaQuery.of(context);
- final double height = mediaQuery.size.height * 0.47; 
-  final double width = mediaQuery.size.width * 0.9;
+        final mediaQuery = MediaQuery.of(context);
+        final double height = mediaQuery.size.height * 0.47;
+        final double width = mediaQuery.size.width * 0.9;
+
         return Scaffold(
           appBar: AppBar(
             title: const Text('Quiz'),
           ),
           body: Padding(
-            padding:  EdgeInsets.only(left: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               children: [
-            
                 Container(
-                  decoration: BoxDecoration(border: Border.all(width: 0.5),borderRadius: BorderRadius.circular(12)),
-                height: height,
-                width: width,
+                  decoration: BoxDecoration(
+                      border: Border.all(width: 0.5),
+                      borderRadius: BorderRadius.circular(12)),
+                  height: height,
+                  width: width,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-
                       Padding(
                         padding: const EdgeInsets.all(12),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                          
-                        
-                           Text(
-                          'Question ${viewModel.currentQuestionIndex + 1} of ${quiz.questions.length}',
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.grey
-                          ),
-                        ),
-                         Text(
-                            '${quiz.questions[viewModel.currentQuestionIndex].marks} Marks',
-                            style: const TextStyle(fontSize: 16),
-                          ),
-                        ],),
-                      )
-                     ,
-                        Padding(
-                        padding:  EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding:  EdgeInsets.only(top: 27),
-
-                              
-                              child: Text(
-                                        '${viewModel.parseHtmlstring(questionDetails.question)}?',
-                                // 'This is a long text that you want to display in just two lines. If the text exceeds two lines, it will be truncated.',
-                              
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
-                                    maxLines: 2,
-                                  
-                              ),
+                            Text(
+                              'Question ${viewModel.currentQuestionIndex + 1} of ${quiz.questions.length}',
+                              style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.grey),
                             ),
-                         
+                            Text(
+                              '${quiz.questions[viewModel.currentQuestionIndex].marks} Marks',
+                              style: const TextStyle(fontSize: 16),
+                            ),
                           ],
                         ),
                       ),
-                      // Marks
-                    
-                      ...questionDetails.options.map((option) {
-                         return Padding(
-  padding: const EdgeInsets.all(10),
-  child: Container(
-    decoration: BoxDecoration(
-      border: Border.all(width: 0.3),
-      borderRadius: BorderRadius.circular(8),
-            color: Colors.grey[100], // Set the desired grey color
- // Set the desired radius
-    ),
-    child: RadioListTile<String>(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8), // Match the radius here
-      ),
-      title: Text(option.text,style: TextStyle(fontSize: 15),),
-      value: option.text,
-      groupValue: viewModel.selectedOption,
-      onChanged: viewModel.isAnswered
-          ? null
-          : (value) {
-              viewModel.selectedOption = value;
-              viewModel.notifyListeners();
-            },
-    ),
-  ),
-);
-
-                      }).toList(),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          '${viewModel.parseHtmlstring(questionDetails.question)}?',
+                          style: const TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      // Render options based on question type
+                      if (viewModel.isMultipleChoice)
+                        Column(
+                          children: questionDetails.options.map((option) {
+                            return CheckboxListTile(
+                              title: Text(option.text),
+                              value: viewModel.selectedOptions
+                                  .contains(option.text),
+                              onChanged: (isChecked) {
+                                viewModel.toggleOption(option.text);
+                              },
+                            );
+                          }).toList(),
+                        )
+                      else
+                        Column(
+                          children: questionDetails.options.map((option) {
+                            return RadioListTile<String>(
+                              title: Text(option.text),
+                              value: option.text,
+                              groupValue: viewModel.selectedOption,
+                              onChanged: viewModel.isAnswered
+                                  ? null
+                                  : (value) {
+                                      viewModel.selectedOption = value;
+                                      viewModel.notifyListeners();
+                                    },
+                            );
+                          }).toList(),
+                        ),
                       const SizedBox(height: 20),
                       // Check or Submit Button
-                      if (!viewModel.isAnswered)
-                        ElevatedButton(
-                          onPressed: viewModel.selectedOption == null
-                              ? null
-                              : () => viewModel.checkAnswer(),
-                          child: const Text('Check'),
-                        ),
+                      ElevatedButton(
+                        onPressed: viewModel.canCheckAnswer
+                            ? () => viewModel.checkAnswer()
+                            : null,
+                        child: const Text('Check'),
+                      ),
                       if (viewModel.isAnswered)
                         Column(
                           children: [
-                            // Feedback on Answer
                             Text(
                               viewModel.isCorrect ? 'Correct!' : 'Incorrect!',
                               style: TextStyle(
@@ -224,52 +207,31 @@ class QuizPage extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 10),
-                            // Next Question or Submit Quiz
-                          //   ElevatedButton(
-                          //     // onPressed: viewModel.currentQuestionIndex <
-                          //     //         quiz.questions.length - 1
-                          //     //     ? () => viewModel.nextQuestion()
-                          //     //     : () => viewModel.submitQuiz(),
-                          //     // child: Text(
-                          //     //   viewModel.currentQuestionIndex <
-                          //     //           quiz.questions.length - 1
-                          //     //       ? 'Next Question'
-                          //     //       : 'Submit Quiz',
-                          //     // ),
-
-                          // child: const Text('Next Question'),
-                          //     )
-                        if (!viewModel.isAnswered)
-                  ElevatedButton(
-                    onPressed: viewModel.selectedOption == null
-                        ? null
-                        : () => viewModel.checkAnswer(),
-                    child: const Text('Check'),
-                  ),
-                if (viewModel.isAnswered)
-                  ElevatedButton(
-                    onPressed: viewModel.currentQuestionIndex <
-                            quiz.questions.length - 1
-                        ? () => viewModel.nextQuestion()
-                        : () => viewModel.submitQuiz(context),
-                    child: Text(
-                      viewModel.currentQuestionIndex <
-                              quiz.questions.length - 1
-                          ? 'Next Question'
-                          : 'Submit Now',
-                    ),
-                  ),
+                            ElevatedButton(
+                              onPressed: viewModel.currentQuestionIndex <
+                                      quiz.questions.length - 1
+                                  ? () => viewModel.nextQuestion()
+                                  : () => viewModel.submitQuiz(context),
+                              child: Text(
+                                viewModel.currentQuestionIndex <
+                                        quiz.questions.length - 1
+                                    ? 'Next Question'
+                                    : 'Submit Now',
+                              ),
+                            ),
                           ],
                         ),
                     ],
                   ),
                 ),
-                    LinearProgressIndicator(
-                value:quiz.duration>0? viewModel.remainingTime / (quiz.duration * 60):0.0,
-                minHeight: 5,
-                backgroundColor: Colors.grey[300],
-                color: Colors.blue,
-              ),
+                LinearProgressIndicator(
+                  value: quiz.duration > 0
+                      ? viewModel.remainingTime / (quiz.duration * 60)
+                      : 0.0,
+                  minHeight: 5,
+                  backgroundColor: Colors.grey[300],
+                  color: Colors.blue,
+                ),
               ],
             ),
           ),

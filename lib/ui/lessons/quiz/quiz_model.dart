@@ -51,18 +51,22 @@ class QuizQuestion {
 class QuestionDetails {
   final String question;
   final String type;
+    final int multiple; // New field to represent if it's a multiple-choice question
+
   final List<Option> options;
 
   QuestionDetails({
     required this.question,
     required this.type,
     required this.options,
+    required this.multiple
   });
 
   factory QuestionDetails.fromJson(Map<String, dynamic> json) {
     return QuestionDetails(
       question: json['message']['question'],
       type: json['message']['type'],
+      multiple: json['multiple']??0,
       options: [
         if (json['message']['option_1'] != null)
           Option(

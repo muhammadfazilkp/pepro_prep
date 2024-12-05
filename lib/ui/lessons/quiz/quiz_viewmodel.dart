@@ -16,37 +16,59 @@ class QuizViewModel extends ChangeNotifier {
     bool isSubmitted = false; // New state for submission
 
   List<Map<String, dynamic>> results = [];
-
+List <String>selectedOptions=[];
 int remainingTime= 0; // Time elapsed in seconds
   Timer? _timer;
 
   // Start the timer
- void startTimer(BuildContext context)async{
-    if(remainingTime<=0)return;
+//  void startTimer(BuildContext context)async{
+//     if(remainingTime<=0)return;
          
-_timer=Timer.periodic(const Duration(seconds: 1), (timer){
-  if(remainingTime>0){
-    remainingTime--;
-    notifyListeners();
-  }else{
-    timer.cancel();
-    submitQuiz(context);
+// _timer=Timer.periodic(const Duration(seconds: 1), (timer){
+//   if(remainingTime>0){
+//     remainingTime--;
+//     notifyListeners();
+//   }else{
+//     timer.cancel();
+//     submitQuiz(context);
+//   }
+// });
+//  }
+
+  bool get isMultipleChoice {
+    return currentQuestionDetails!.multiple==1;
+        
   }
-});
- }
+
+  bool get canCheckAnswer {
+    if (isMultipleChoice) {
+      return selectedOptions.isNotEmpty;
+    } else {
+      return selectedOption != null;
+    }
+  }
+
+  void toggleOption(String option) {
+    if (selectedOptions.contains(option)) {
+      selectedOptions.remove(option);
+    } else {
+      selectedOptions.add(option);
+    }
+    notifyListeners();
+  }
   // Fetch quiz and first question details
   Future<void> loadQuiz(String? quizname,BuildContext context) async {
     try {
       final fetchedQuiz = await fetchQuiz(quizname!);
       quiz = fetchedQuiz;
 
-      if(remainingTime>0){
-       remainingTime = (quiz.duration * 60).toInt(); // Convert duration to seconds
-      startTimer(context); 
+      // if(remainingTime>0){
+      //  remainingTime = (quiz.duration * 60).toInt(); // Convert duration to seconds
+      // // startTimer(context); 
 
-      }else{
-         remainingTime = 0;
-      }
+      // }else{
+      //    remainingTime = 0;
+      // }
       
       await loadQuestionDetails(fetchedQuiz.questions.first.questionId);
       notifyListeners();
@@ -108,19 +130,32 @@ print(response.body);
   }
 
   // Check answer correctness
-  void checkAnswer() {
-    if (selectedOption == null) return;
+ void checkAnswer() {
+     if (isMultipleChoice) {
+      final correctAnswers = currentQuestionDetails!.options
+          .where((option) => option.isCorrect)
+          .map((option) => option.text)
+          .toSet();
+      final selectedAnswers = selectedOptions.toSet();
+
+      isCorrect = correctAnswers.difference(selectedAnswers).isEmpty &&
+          selectedAnswers.difference(correctAnswers).isEmpty;
+    } else {
+      isCorrect = currentQuestionDetails!.options
+          .firstWhere((option) => option.text == selectedOption!)
+          .isCorrect;
+    }
+
 
     isAnswered = true;
-    isCorrect = currentQuestionDetails!.options
-        .firstWhere((option) => option.text == selectedOption!)
-        .isCorrect;
-
- results.add({
+    results.add({
       "question_name": quiz.questions[currentQuestionIndex].questionId,
-      "answer": selectedOption!,
+      "answer": currentQuestionDetails!.type == "Choices"
+          ? selectedOptions
+          : selectedOption,
       "is_correct": [isCorrect ? 1 : 0],
     });
+
     notifyListeners();
   }
 
@@ -190,6 +225,8 @@ Future<void> submitQuiz(BuildContext context) async {
     isAnswered = false;
     isCorrect = false;
     selectedOption = null;
+        selectedOptions = [];
+
   }
 
 
