@@ -1,4 +1,6 @@
 import 'package:education_media/app/utils.dart';
+import 'package:education_media/constants/app_constants.dart';
+import 'package:education_media/service/navigation_service.dart';
 import 'package:education_media/ui/login/login_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,7 +18,7 @@ class LoginViewModel extends ChangeNotifier {
   bool _isLoggedIn = false;
   String? _errorMessage;
   LoginResponse? _loginResponse;
-
+  String? logdedUser;
   bool get isLoading => _isLoading;
   bool get isLoggedIn => _isLoggedIn;
   String? get errorMessage => _errorMessage;
@@ -28,6 +30,13 @@ class LoginViewModel extends ChangeNotifier {
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
+  }
+
+  void init(){
+    if(_isLoggedIn){
+      navigationService.pushNamedAndRemoveUntil(RoutePaths.catogory);
+    }
+    debugPrint('userNot fount');
   }
 
   // Login function
@@ -52,8 +61,12 @@ class LoginViewModel extends ChangeNotifier {
       if (response.statusCode == 200) {
         final responsedata = jsonDecode(response.body);
         debugPrint('Full Response Login: $responsedata');
+        logdedUser=responsedata['LoggedIn'];
+        debugPrint('userLogedIn: $logdedUser');
         _loginResponse = LoginResponse.fromJson(responsedata);
         _isLoggedIn = true;
+        notifyListeners();
+        navigationService.pushNamed(RoutePaths.catogory);
         getUserKeys(
             loginKey: _loginResponse!.keyDetails.apiKey,
             loginSecretKey: _loginResponse!.keyDetails.apiSecret);
