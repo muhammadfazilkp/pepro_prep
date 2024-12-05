@@ -72,7 +72,7 @@ class SignInScreen extends StatelessWidget {
                                     focusedBorder:
                                         authOutlineInputBorder.copyWith(
                                             borderSide: const BorderSide(
-                                                color: Color(0xFFFF7643)))),
+                                                color: Colors.blue))),
                               ),
                               Padding(
                                 padding:
@@ -98,7 +98,7 @@ class SignInScreen extends StatelessWidget {
                                       focusedBorder:
                                           authOutlineInputBorder.copyWith(
                                               borderSide: const BorderSide(
-                                                  color: Color(0xFFFF7643)))),
+                                                  color:Colors.blue))),
                                 ),
                               ),
                               const SizedBox(height: 8),
@@ -108,7 +108,7 @@ class SignInScreen extends StatelessWidget {
                                       const EdgeInsets.symmetric(vertical: 8),
                                   child: Text(
                                     viewModel.errorMessage!,
-                                    style: const TextStyle(color: Colors.red),
+                                    style: const TextStyle(color: Colors.blue),
                                   ),
                                 ),
                               ElevatedButton(
@@ -120,7 +120,7 @@ class SignInScreen extends StatelessWidget {
                                 },
                                 style: ElevatedButton.styleFrom(
                                   elevation: 0,
-                                  backgroundColor: const Color(0xFFFF7643),
+                                  backgroundColor: Colors.blue,
                                   foregroundColor: Colors.white,
                                   minimumSize: const Size(double.infinity, 48),
                                   shape: const RoundedRectangleBorder(
@@ -185,7 +185,7 @@ class NoAccountText extends StatelessWidget {
           child: const Text(
             "Sign Up",
             style: TextStyle(
-              color: Color(0xFFFF7643),
+              color:Colors.blue,
             ),
           ),
         ),

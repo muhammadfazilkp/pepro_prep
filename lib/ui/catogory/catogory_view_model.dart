@@ -20,9 +20,21 @@ class CatogoryViewModel extends ChangeNotifier {
   String? secretKey;
 
   Future<void> fetchLiveCourses() async {
+
+    if(key==null&&secretKey==null){
+      getsecretKey();
+    }
     Uri url = buildBaseUrl('lms.lms.utils.get_courses');
+    String credentials = 'token $key:$secretKey';
+
+      final headers = {
+        "Authorization": " $credentials",
+        "x-secret-key": credentials,
+        'Accept': 'application/json',
+        "Content-Type": "application/json",
+      };
     try {
-      final response = await http.get(url);
+      final response = await http.get(url,headers: headers);
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         final List<dynamic> liveData = data['message']['live'] ?? [];
@@ -61,10 +73,12 @@ class CatogoryViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  getsecretKey() async {
+ Future<void> getsecretKey() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     key = pref.getString('loginKey');
     secretKey = pref.getString('loginSecretKey');
+        debugPrint('Loaded keys: key=$key, secretKey=$secretKey');
+
     notifyListeners();
   }
 }

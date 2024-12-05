@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:education_media/ui/catogory/catogory_view_model.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:http/http.dart' as http;
@@ -15,12 +16,12 @@ class ChapterVeiwmodel extends ChangeNotifier {
   String? loginKey;
   String? loginSecretKey;
 
-  void init() async {
-    _disableScreenshot();
-    getKeys();
+ Future<void> init() async {
+  await  _disableScreenshot();
+  await  getKeys();
   }
 
-  getKeys() async {
+ Future<void> getKeys() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     loginKey = pref.getString('loginKey');
     loginSecretKey = pref.getString('loginSecretKey');
@@ -30,11 +31,14 @@ class ChapterVeiwmodel extends ChangeNotifier {
   Future<void> fetchChapters(String courseName) async {
     //  String encodedPath = "https://peproprep.edusuite.store/api/resource/Course Chapter"
     //     .replaceAll(" ","%20");
-
+ if (loginKey == null || loginSecretKey == null) {
+      debugPrint('Keys are not available. Fetching keys...');
+      await getKeys(); // Ensure keys are loaded before making the API call
+    }
     final Uri url = Uri.parse(
         "https://peproprep.edusuite.store/api/resource/Course%20Chapter");
     try {
-      String credentials = "token 6e874616bdffac3:59a589ce127cc2a";
+      String credentials = "token $loginKey:$loginSecretKey";
 
       final headers = {
         "Authorization": " $credentials",
@@ -60,9 +64,17 @@ class ChapterVeiwmodel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> _disableScreenshot() async {
-    await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+
+Future<void> _disableScreenshot() async {
+  if (Platform.isAndroid) {
+    try {
+      await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+    } catch (e) {
+      debugPrint('Error disabling screenshots: $e');
+    }
   }
+}
+
    Future<void> _enableScreenshot() async {
     await FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
   }

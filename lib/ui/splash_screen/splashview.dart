@@ -1,3 +1,4 @@
+import 'package:education_media/app/images.dart';
 import 'package:education_media/ui/splash_screen/splash_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
@@ -17,7 +18,7 @@ class Splashview extends StatelessWidget {
             decoration: const BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage(
-                      'assets/images/spalsh_image.avif',
+                      splashImage,
                     ),
                     fit: BoxFit.cover)),
           ),
