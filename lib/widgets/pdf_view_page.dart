@@ -1,3 +1,4 @@
+import 'package:education_media/widgets/pdf_fullscreen_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
@@ -20,51 +21,39 @@ import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 // }
 
 
-Widget pdfView(BuildContext context, String pdfUrl) {
-  final mediaQuery = MediaQuery.of(context);
-  final double height = mediaQuery.size.height * 0.5; // 60% of screen height
-  final double width = mediaQuery.size.width * 0.9; // 90% of screen width
-
-  return Center(
-    child: Container(
-      padding: EdgeInsets.all(16.0), // Add padding around the widget
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12.0),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black26,
-            blurRadius: 8.0,
-            offset: Offset(0, 4), // Shadow offset
+Widget pdfView(BuildContext context, String pdfUrl, String fileName) {
+  return GestureDetector(
+    onTap: () {
+      // Navigate to the full-screen PDF view
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => FullScreenPdfView(pdfUrl: pdfUrl),
+        ),
+      );
+    },
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // PDF icon
+        Icon(
+          Icons.picture_as_pdf,
+          size: 45,
+          color: Colors.red,
+        ),
+        const SizedBox(height: 8.0),
+        // PDF file name
+        Text(
+          fileName,
+          style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.bold,
+            color: Colors.blue,
           ),
-        ],
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            "PDF View",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.blueAccent,
-            ),
-          ),
-          SizedBox(height: 8.0),
-          Container(
-            height: height,
-            width: width,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(8.0), // Rounded corners
-              child: SfPdfViewer.network(
-                pdfUrl,
-                canShowScrollHead: true,
-                canShowScrollStatus: true,
-              ),
-            ),
-          ),
-        ],
-      ),
+          textAlign: TextAlign.center,
+        ),
+      ],
     ),
-  );
-}
+  );}
+
+  

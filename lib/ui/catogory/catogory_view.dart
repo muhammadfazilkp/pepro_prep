@@ -1,9 +1,11 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:education_media/service/apiservice.dart';
 import 'package:education_media/ui/catogory/catogory_view_model.dart';
 import 'package:education_media/ui/chapters/chapter_view.dart';
 import 'package:education_media/widgets/diologs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:stacked/stacked.dart';
 
@@ -19,11 +21,34 @@ class CategoryView extends StatelessWidget {
       viewModelBuilder: () =>
           CatogoryViewModel(apiservice: Provider.of<Apiservice>(context)),
       builder: (context, model, child) {
+        const colorizeColors = [
+  Colors.purple,
+  Colors.blue,
+  Color.fromARGB(255, 59, 92, 255),
+  Color.fromARGB(255, 54, 244, 244),
+];
+
+const colorizeTextStyle = TextStyle(
+  fontSize: 26.0,
+  fontFamily: 'Agne',
+  fontWeight: FontWeight.w700
+);
         return DefaultTabController(
           length: 6, // Number of tabs
           child: Scaffold(
             appBar: AppBar(
-              automaticallyImplyLeading: false,
+              toolbarHeight: 100,
+              title:AnimatedTextKit(
+                isRepeatingAnimation: true,
+                animatedTexts: [
+                 ColorizeAnimatedText(
+        "Welcome let's\n get started",
+        textStyle: colorizeTextStyle,
+        colors: colorizeColors,
+        
+      ),
+      
+              ]),
               //  title: const Text('User Name'),
               actions: [
                 Padding(
@@ -32,7 +57,7 @@ class CategoryView extends StatelessWidget {
                     onTap: () => showLogoutDialog(
                         NavigationService.navigationKey.currentContext!,
                         () => model.logOut(context)),
-                    child: const Icon(Icons.logout),
+                    child: const Icon(Icons.logout,color: Colors.purple,),
                   ),
                 )
               ],
@@ -70,8 +95,11 @@ class LiveGridView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<CatogoryViewModel>.reactive(
       viewModelBuilder: () =>
-          CatogoryViewModel(apiservice: Provider.of<Apiservice>(context))
-            ..fetchLiveCourses(),
+          CatogoryViewModel(apiservice: Provider.of<Apiservice>(context)),
+           onViewModelReady: (viewModel) async {
+        await viewModel.getsecretKey(); // Ensure keys are loaded first
+        await viewModel.fetchLiveCourses(); // Then fetch the courses
+      },
       builder: (context, viewModel, child) {
         if (viewModel.isLoading) {
           return const Center(child: CircularProgressIndicator());
@@ -87,7 +115,7 @@ class LiveGridView extends StatelessWidget {
             mainAxisSpacing: 8,
           ),
           itemCount: viewModel.liveCourses.length,
-          itemBuilder: (context, index) {
+          itemBuilder: (context,index) {
             final course = viewModel.liveCourses[index];
             return InkWell(
               onTap: () {

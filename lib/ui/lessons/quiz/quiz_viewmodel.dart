@@ -4,7 +4,7 @@ import 'package:education_media/ui/lessons/quiz/quiz_model.dart';
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 class QuizViewModel extends ChangeNotifier {
   late QuizResponse quiz;
@@ -16,59 +16,59 @@ class QuizViewModel extends ChangeNotifier {
     bool isSubmitted = false; // New state for submission
 
   List<Map<String, dynamic>> results = [];
-List <String>selectedOptions=[];
+String? loginKey;
+  String? loginSecretKey;
+
 int remainingTime= 0; // Time elapsed in seconds
   Timer? _timer;
 
   // Start the timer
-//  void startTimer(BuildContext context)async{
-//     if(remainingTime<=0)return;
+ void startTimer(BuildContext context)async{
+    if(remainingTime<=0)return;
          
-// _timer=Timer.periodic(const Duration(seconds: 1), (timer){
-//   if(remainingTime>0){
-//     remainingTime--;
-//     notifyListeners();
-//   }else{
-//     timer.cancel();
-//     submitQuiz(context);
-//   }
-// });
-//  }
-
-  bool get isMultipleChoice {
-    return currentQuestionDetails!.multiple==1;
-        
+_timer=Timer.periodic(const Duration(seconds: 1), (timer){
+  if(remainingTime>0){
+    remainingTime--;
+    notifyListeners();
+  }else{
+    timer.cancel();
+    submitQuiz(context);
+  }
+});
+ }
+  String formatRemainingTime() {
+    int minutes = remainingTime ~/ 60;
+    int seconds = remainingTime % 60;
+    return '$minutes:${seconds.toString().padLeft(2, '0')}'; // Format as MM:SS
   }
 
-  bool get canCheckAnswer {
-    if (isMultipleChoice) {
-      return selectedOptions.isNotEmpty;
-    } else {
-      return selectedOption != null;
-    }
+
+
+
+  Future<void> init() async {
+  await  getKeys();
   }
 
-  void toggleOption(String option) {
-    if (selectedOptions.contains(option)) {
-      selectedOptions.remove(option);
-    } else {
-      selectedOptions.add(option);
-    }
+ Future<void> getKeys() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    loginKey = pref.getString('loginKey');
+    loginSecretKey = pref.getString('loginSecretKey');
     notifyListeners();
   }
+
   // Fetch quiz and first question details
   Future<void> loadQuiz(String? quizname,BuildContext context) async {
     try {
       final fetchedQuiz = await fetchQuiz(quizname!);
       quiz = fetchedQuiz;
 
-      // if(remainingTime>0){
-      //  remainingTime = (quiz.duration * 60).toInt(); // Convert duration to seconds
-      // // startTimer(context); 
+      if(remainingTime>0){
+       remainingTime = (quiz.duration * 60).toInt(); // Convert duration to seconds
+      startTimer(context); 
 
-      // }else{
-      //    remainingTime = 0;
-      // }
+      }else{
+         remainingTime = 0;
+      }
       
       await loadQuestionDetails(fetchedQuiz.questions.first.questionId);
       notifyListeners();
@@ -83,9 +83,11 @@ int remainingTime= 0; // Time elapsed in seconds
 
     final encodedPath =
         'https://peproprep.edusuite.store/api/resource/LMS%20Quiz/$encodedChapterName';
-
+if(loginKey==null&&loginSecretKey==null){
+  getKeys();
+}
         final Uri url=Uri.parse(encodedPath);
-       String credentials = "token 6e874616bdffac3:59a589ce127cc2a";
+       String credentials = "token $loginKey:$loginSecretKey";
 
         
       final headers = {
@@ -107,7 +109,7 @@ print(response.body);
   Future<void> loadQuestionDetails(String questionId) async {
     final url =
         'https://peproprep.edusuite.store/api/method/lms.lms.utils.get_question_details';
-               String credentials = "token 6e874616bdffac3:59a589ce127cc2a";
+               String credentials = "token $loginKey:$loginSecretKey";
 
            final headers = {
         "Authorization": " $credentials",
@@ -130,32 +132,19 @@ print(response.body);
   }
 
   // Check answer correctness
- void checkAnswer() {
-     if (isMultipleChoice) {
-      final correctAnswers = currentQuestionDetails!.options
-          .where((option) => option.isCorrect)
-          .map((option) => option.text)
-          .toSet();
-      final selectedAnswers = selectedOptions.toSet();
-
-      isCorrect = correctAnswers.difference(selectedAnswers).isEmpty &&
-          selectedAnswers.difference(correctAnswers).isEmpty;
-    } else {
-      isCorrect = currentQuestionDetails!.options
-          .firstWhere((option) => option.text == selectedOption!)
-          .isCorrect;
-    }
-
+  void checkAnswer() {
+    if (selectedOption == null) return;
 
     isAnswered = true;
-    results.add({
+    isCorrect = currentQuestionDetails!.options
+        .firstWhere((option) => option.text == selectedOption!)
+        .isCorrect;
+
+ results.add({
       "question_name": quiz.questions[currentQuestionIndex].questionId,
-      "answer": currentQuestionDetails!.type == "Choices"
-          ? selectedOptions
-          : selectedOption,
+      "answer": selectedOption!,
       "is_correct": [isCorrect ? 1 : 0],
     });
-
     notifyListeners();
   }
 
@@ -175,7 +164,7 @@ Future<void> nextQuestion() async {
 Future<void> submitQuiz(BuildContext context) async {
   final Uri url = Uri.parse(
         'https://peproprep.edusuite.store/api/method/peproprep.peproprep.api.extress.quiz_summary');
-    String credentials = "token 6e874616bdffac3:59a589ce127cc2a";
+    String credentials = "token $loginKey:$loginSecretKey";
    final headers = {
       "Authorization": " $credentials",
       "x-secret-key": credentials,
@@ -225,8 +214,6 @@ Future<void> submitQuiz(BuildContext context) async {
     isAnswered = false;
     isCorrect = false;
     selectedOption = null;
-        selectedOptions = [];
-
   }
 
 

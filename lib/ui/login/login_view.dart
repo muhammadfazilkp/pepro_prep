@@ -2,6 +2,7 @@ import 'package:education_media/constants/app_constants.dart';
 import 'package:education_media/service/navigation_service.dart';
 
 import 'package:education_media/ui/login/login_view_model.dart';
+import 'package:education_media/ui/splash_screen/splashview.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -12,13 +13,8 @@ class SignInScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<LoginViewModel>.reactive(
         viewModelBuilder: () => LoginViewModel(),
-        onViewModelReady: (viewmodel) {
-          viewmodel.addListener(() {
-            if (viewmodel.isLoggedIn) {
-              navigationService.pushNamedAndRemoveUntil(RoutePaths.catogory);
-            }
-          });
-        },
+        onViewModelReady:  (viewModel) => viewModel.init(),
+        
         builder: (context, viewModel, child) {
           return Scaffold(
             backgroundColor: Colors.white,
@@ -116,9 +112,12 @@ class SignInScreen extends StatelessWidget {
                                   ),
                                 ),
                               ElevatedButton(
-                                onPressed: viewModel.isLoading
-                                    ? null
-                                    : viewModel.login,
+                                // onPressed: viewModel.isLoading
+                                //     ? null
+                                //     : viewModel.login,
+                                onPressed: ()  async{
+                                  viewModel.login();
+                                },
                                 style: ElevatedButton.styleFrom(
                                   elevation: 0,
                                   backgroundColor: Colors.blue,
@@ -176,11 +175,11 @@ class NoAccountText extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () {
-            // Handle navigation to Sign Up\
+            
             // Navigator.push(
             //     context,
             //     MaterialPageRoute(
-            //       builder: (context) => const HomeView(),
+            //       builder: (context) => const Splashview(),
             //     ));
           },
           child: const Text(

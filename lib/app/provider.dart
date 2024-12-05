@@ -28,7 +28,7 @@ List<SingleChildWidget> independentServices = [
   ),
 
   ChangeNotifierProvider(create: (context)=>ChapterVeiwmodel()),
-    ChangeNotifierProvider(create: (context)=>LessonsViewmodel()),
+    ChangeNotifierProvider(create: (context)=>LessonViewModel()),
 ChangeNotifierProvider(create: (context)=>QuizViewModel()),
 ]; 
 

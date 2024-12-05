@@ -1,3 +1,4 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:education_media/app/images.dart';
 import 'package:education_media/ui/lessons/lesson_details_page.dart';
 import 'package:education_media/ui/lessons/lessons_viewmodel.dart';
@@ -62,14 +63,9 @@ class LessonGridView extends StatelessWidget {
                                                             ),
                                                           ),
                       Center(
-                        child: Text(
-                          lesson.lesson,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
+                        child: AnimatedTextKit(animatedTexts: [
+                          TypewriterAnimatedText(lesson.lesson,textStyle: TextStyle(fontFamily: 'Agne',fontSize: 16,fontWeight: FontWeight.w600))
+                        ])
                       ),
                     ],
                   ),

@@ -1,3 +1,4 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:education_media/app/images.dart';
 import 'package:education_media/ui/chapters/chapter_veiwmodel.dart';
 import 'package:education_media/ui/lessons/lessons_list_view.dart';
@@ -12,10 +13,12 @@ class ChapterView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ChapterVeiwmodel>.reactive(
-      onViewModelReady: (viewModel) => viewModel.init(),
-      viewModelBuilder: () =>
-          ChapterVeiwmodel()
-            ..fetchChapters(courseName!),
+      onViewModelReady: (viewModel)async {
+
+         await viewModel.init(); // Wait for keys to load
+        await viewModel.fetchChapters(courseName!);
+      },
+      viewModelBuilder: ()=>ChapterVeiwmodel(),
       builder: (context, viewModel, child) {
         return Scaffold(
           appBar: AppBar(
@@ -44,13 +47,10 @@ class ChapterView extends StatelessWidget {
                           child: Card(
                             elevation: 4,
                             child: ListTile(
-                              title: Text(
-                                chapter.name,
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                              title:AnimatedTextKit(
+                                animatedTexts: [
+                                TyperAnimatedText(chapter.name,textStyle: TextStyle(fontFamily: 'Agne',fontSize: 15,fontWeight: FontWeight.w600))
+                              ]),
                               leading:Container(
                                                             height: 50, 
                                                             width: 50,

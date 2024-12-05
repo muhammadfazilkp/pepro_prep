@@ -3,37 +3,37 @@ import 'dart:convert';
 import 'package:education_media/ui/lessons/lessons_model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart'as http;
-class LessonsViewmodel extends ChangeNotifier{
+// class LessonsViewmodel extends ChangeNotifier{
 
-  List<Lesson> lessons = [];
-  bool isLoadingLessons = true;
+//   List<Lesson> lessons = [];
+//   bool isLoadingLessons = true;
 
-  Future<void> fetchLessons(String chapterName) async {
-    final Uri url = Uri.parse('https://peproprep.edusuite.store/api/resource/Course%20Lesson$chapterName');
-    try {
-      String credentials = "token 6e874616bdffac3:59a589ce127cc2a";
+//   Future<void> fetchLessons(String chapterName) async {
+//     final Uri url = Uri.parse('https://peproprep.edusuite.store/api/resource/Course%20Lesson$chapterName');
+//     try {
+//       String credentials = "token 6e874616bdffac3:59a589ce127cc2a";
 
-      final headers = {
-        "Authorization": " $credentials",
-        "x-secret-key": credentials,
-        'Accept': 'application/json',
-        "Content-Type": "application/json",
-      };
-      final response = await http.get(url,headers:headers );
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        final List<dynamic> lessonsData = data['data'] ?? [];
-        lessons = lessonsData.map((json) => Lesson.fromJson(json)).toList();
-      } else {
-        print('Failed to load lessons. Status code: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('Error fetching lessons: $e');
-    }
-    isLoadingLessons = false;
-    notifyListeners();
-  }
-}
+//       final headers = {
+//         "Authorization": " $credentials",
+//         "x-secret-key": credentials,
+//         'Accept': 'application/json',
+//         "Content-Type": "application/json",
+//       };
+//       final response = await http.get(url,headers:headers );
+//       if (response.statusCode == 200) {
+//         final data = jsonDecode(response.body);
+//         final List<dynamic> lessonsData = data['data'] ?? [];
+//         lessons = lessonsData.map((json) => Lesson.fromJson(json)).toList();
+//       } else {
+//         print('Failed to load lessons. Status code: ${response.statusCode}');
+//       }
+//     } catch (e) {
+//       print('Error fetching lessons: $e');
+//     }
+//     isLoadingLessons = false;
+//     notifyListeners();
+//   }
+// }
 
 class LessonViewModel extends ChangeNotifier {
   ChapterWithLessons? chapterWithLessons;

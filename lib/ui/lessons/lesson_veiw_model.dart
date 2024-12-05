@@ -6,17 +6,36 @@ import 'package:education_media/ui/lessons/lesson_details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:http/http.dart'as http;
+import 'package:shared_preferences/shared_preferences.dart';
 class LessonDetailsViewModel extends ChangeNotifier {
   bool isLoading = true;
   LessonDetails? lessonDetails;
 
+  bool hasAccess=false;
+
+ String? loginKey;
+  String? loginSecretKey;
 
 
-void init ()async{
-_disableScreenshot();
-}
+ Future<void> init() async {
+  await  _disableScreenshot();
+  await  getKeys();
+  }
+
+ Future<void> getKeys() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    loginKey = pref.getString('loginKey');
+    loginSecretKey = pref.getString('loginSecretKey');
+    notifyListeners();
+  }
+
+
   Future<void> fetchLessonDetails(String lessonName) async {
     String encodedLessonName = Uri.encodeComponent(lessonName);
+     if (loginKey == null || loginSecretKey == null) {
+      debugPrint('Keys are not available. Fetching keys...');
+      await getKeys(); // Ensure keys are loaded before making the API call
+    }
     final Uri url = Uri.parse(
       'https://peproprep.edusuite.store/api/resource/Course%20Lesson/$encodedLessonName',
     );
@@ -24,7 +43,7 @@ _disableScreenshot();
 //         "https://peproprep.edusuite.store/api/resource/Course%20Lesson/$lessonName");
     debugPrint("URL : $url");
     try {
-      String credentials = "token 6e874616bdffac3:59a589ce127cc2a";
+      String credentials = "token $loginKey:$loginSecretKey";
 
       final headers = {
         "Authorization": " $credentials",
@@ -38,7 +57,12 @@ _disableScreenshot();
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body)['data'];
         lessonDetails = LessonDetails.fromJson(data);
-      } else {
+        hasAccess=true;
+      }
+      else if(response.statusCode==403){
+hasAccess=false;
+      }
+       else {
         print('Failed to load lesson details. Status code: ${response.statusCode}');
       }
     } catch (e) {

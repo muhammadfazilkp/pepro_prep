@@ -72,11 +72,14 @@ class LessonDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final CatogoryViewModel catogoryViewModel;
     return ViewModelBuilder<LessonDetailsViewModel>.reactive(
-      viewModelBuilder: () =>
-          LessonDetailsViewModel()..fetchLessonDetails(lessonName),
-          // onViewModelReady: (viewModel) => viewModel.init(),
+      viewModelBuilder: () =>LessonDetailsViewModel(),
+          
+          
+          onViewModelReady: (viewModel)async {
+            await viewModel.init(); // Wait for keys to load
+        await viewModel.fetchLessonDetails(lessonName);
+          },
       builder: (context, viewModel, child) {
         if (viewModel.isLoading) {
           return const Scaffold(
@@ -86,6 +89,19 @@ class LessonDetailsPage extends StatelessWidget {
         }
 
         final lessonDetails = viewModel.lessonDetails;
+
+        if(!viewModel.hasAccess){
+  return Scaffold(
+            appBar: AppBar(title: Text(lessonName)),
+            body: const Center(
+              child: Text(
+                'You have no access to this lesson. Please contact the administrator.',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 16, color: Colors.red,fontWeight: FontWeight.bold),
+              ),
+            ),
+          );
+        }
         if (lessonDetails == null) {
           return const Scaffold(
             body: Center(
@@ -125,10 +141,12 @@ class LessonDetailsPage extends StatelessWidget {
                         );
                       }).toList(),
                     );
+                    
                   case 'upload':
                     if (block.fileType == 'PDF') {
                       return pdfView(context,
-                          'https://peproprep.edusuite.store${block.fileUrl}');
+                          'https://peproprep.edusuite.store${block.fileUrl}',"${block.fileUrl}");
+                          
                     } else if (block.fileType == 'MP4') {
                       return VideoView(
                           videoUrl:
