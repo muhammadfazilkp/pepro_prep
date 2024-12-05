@@ -1,4 +1,3 @@
-
 import 'package:education_media/service/apiservice.dart';
 import 'package:education_media/ui/catogory/catogory_view_model.dart';
 import 'package:education_media/ui/chapters/chapter_view.dart';
@@ -7,6 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stacked/stacked.dart';
+
+import '../../service/navigation_service.dart';
 
 class CategoryView extends StatelessWidget {
   const CategoryView({Key? key}) : super(key: key);
@@ -17,7 +18,7 @@ class CategoryView extends StatelessWidget {
       onViewModelReady: (viewModel) => viewModel.getsecretKey(),
       viewModelBuilder: () =>
           CatogoryViewModel(apiservice: Provider.of<Apiservice>(context)),
-      builder: (context, viewModel, child) {
+      builder: (context, model, child) {
         return DefaultTabController(
           length: 6, // Number of tabs
           child: Scaffold(
@@ -27,13 +28,11 @@ class CategoryView extends StatelessWidget {
               actions: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  
                   child: InkWell(
-                    onTap: () => showLogoutDialog(context, () {
-                      viewModel.logOut(context);
-                    }),
-                    // onTap:() => viewModel.logOut(context),
-                    child: const Icon(Icons.logout ),
+                    onTap: () => showLogoutDialog(
+                        NavigationService.navigationKey.currentContext!,
+                        () => model.logOut(context)),
+                    child: const Icon(Icons.logout),
                   ),
                 )
               ],

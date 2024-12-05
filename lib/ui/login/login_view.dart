@@ -1,5 +1,5 @@
 import 'package:education_media/constants/app_constants.dart';
-import 'package:education_media/ui/catogory/catogory_view.dart';
+import 'package:education_media/service/navigation_service.dart';
 
 import 'package:education_media/ui/login/login_view_model.dart';
 import 'package:flutter/material.dart';
@@ -15,12 +15,7 @@ class SignInScreen extends StatelessWidget {
         onViewModelReady: (viewmodel) {
           viewmodel.addListener(() {
             if (viewmodel.isLoggedIn) {
-                          Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>CategoryView()
-                ),
-              );
+              navigationService.pushNamedAndRemoveUntil(RoutePaths.catogory);
             }
           });
         },
@@ -41,15 +36,12 @@ class SignInScreen extends StatelessWidget {
                     child: Column(
                       children: [
                         const SizedBox(height: 16),
-                        InkWell(
-                          // onTap: () =>  Navigator.push(context,MaterialPageRoute(builder: (context) => HomeView(),)),
-                          child: const Text(
-                            "Welcome Back",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        const Text(
+                          "Welcome Back",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                         const SizedBox(height: 8),

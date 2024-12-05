@@ -43,12 +43,15 @@ class LoginViewModel extends ChangeNotifier {
         body: {
           'username': emailController.text.trim(),
           'password': passwordController.text.trim(),
+
         },
       );
 
+   debugPrint('email:${emailController.text} passcode: ${passwordController.text}');
+   
       if (response.statusCode == 200) {
         final responsedata = jsonDecode(response.body);
-        print(responsedata);
+        debugPrint('Full Response Login: $responsedata');
         _loginResponse = LoginResponse.fromJson(responsedata);
         _isLoggedIn = true;
         getUserKeys(
