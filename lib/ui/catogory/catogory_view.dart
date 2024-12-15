@@ -37,6 +37,8 @@ const colorizeTextStyle = TextStyle(
           length: 6, // Number of tabs
           child: Scaffold(
             appBar: AppBar(
+              
+              automaticallyImplyLeading: false,
               toolbarHeight: 100,
               title:AnimatedTextKit(
                 isRepeatingAnimation: true,
@@ -162,7 +164,9 @@ class LiveGridView extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
-                        course.instructors[index].fullName,
+                         course.instructors.isNotEmpty && index < course.instructors.length
+        ? course.instructors.first.fullName // Use `first` if all instructors are the same
+        : 'No instructor available',
                         style: const TextStyle(fontSize: 14),
                         overflow: TextOverflow.ellipsis,
                       ),

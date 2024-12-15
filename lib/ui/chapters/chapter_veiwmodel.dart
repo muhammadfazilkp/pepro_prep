@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'package:education_media/ui/catogory/catogory_view_model.dart';
-import 'package:flutter_windowmanager/flutter_windowmanager.dart';
+// import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:http/http.dart' as http;
 import 'package:education_media/ui/chapters/chapter_model.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,7 @@ class ChapterVeiwmodel extends ChangeNotifier {
   String? loginSecretKey;
 
  Future<void> init() async {
-  await  _disableScreenshot();
+  // await  _disableScreenshot();
   await  getKeys();
   }
 
@@ -36,7 +37,7 @@ class ChapterVeiwmodel extends ChangeNotifier {
       await getKeys(); // Ensure keys are loaded before making the API call
     }
     final Uri url = Uri.parse(
-        "https://peproprep.edusuite.store/api/resource/Course%20Chapter");
+    "https://peproprep.edusuite.store/api/resource/Course%20Chapter?filters=%5B%5B%22course%22%2C%20%22%3D%22%2C%20%22$courseName%22%5D%5D");
     try {
       String credentials = "token $loginKey:$loginSecretKey";
 
@@ -46,7 +47,7 @@ class ChapterVeiwmodel extends ChangeNotifier {
         'Accept': 'application/json',
         "Content-Type": "application/json",
       };
-
+print(url);
       final response = await http.get(url, headers: headers);
       debugPrint(response.body);
       if (response.statusCode == 200) {
@@ -65,18 +66,18 @@ class ChapterVeiwmodel extends ChangeNotifier {
   }
 
 
-Future<void> _disableScreenshot() async {
-  if (Platform.isAndroid) {
-    try {
-      await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
-    } catch (e) {
-      debugPrint('Error disabling screenshots: $e');
-    }
-  }
-}
+// Future<void> _disableScreenshot() async {
+//   if (Platform.isAndroid) {
+//     try {
+//       await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+//     } catch (e) {
+//       debugPrint('Error disabling screenshots: $e');
+//     }
+//   }
+// }
 
-   Future<void> _enableScreenshot() async {
-    await FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
-  }
+//    Future<void> _enableScreenshot() async {
+//     await FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
+//   }
 
 }

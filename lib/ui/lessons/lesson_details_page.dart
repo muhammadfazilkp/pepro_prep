@@ -125,7 +125,7 @@ class LessonDetailsPage extends StatelessWidget {
                 final block = lessonDetails.contentBlocks[index];
                 switch (block.type) {
                   case 'paragraph':
-                    return Text(block.text);
+                    return Text(viewModel.parseHtmlstring(block.text));
 
                   case 'table':
                     return Table(
@@ -142,17 +142,45 @@ class LessonDetailsPage extends StatelessWidget {
                       }).toList(),
                     );
                     
-                  case 'upload':
-                    if (block.fileType == 'PDF') {
-                      return pdfView(context,
-                          'https://peproprep.edusuite.store${block.fileUrl}',"${block.fileUrl}");
+                  // case 'upload':
+                  //   if (block.fileType == 'PDF') {
+                  //     return pdfView(context,
+                  //         'https://peproprep.edusuite.store${block.fileUrl}');
                           
-                    } else if (block.fileType == 'MP4') {
-                      return VideoView(
-                          videoUrl:
-                              'https://peproprep.edusuite.store${block.fileUrl}');
-                    }
-                    break;
+                  //   } else if (block.fileType == 'MP4') {
+                  //     return VideoView(
+                  //         videoUrl:
+                  //             'https://peproprep.edusuite.store${block.fileUrl}');
+                  //   }
+                  //   break;
+                   case 'upload':
+      // If previous block is a header, display the header text above the upload.
+      final headerBeforeUpload =
+          index > 0 && lessonDetails.contentBlocks[index - 1].type == 'header'
+              ? lessonDetails.contentBlocks[index - 1].text
+              : null;
+
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (headerBeforeUpload != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Text(
+                headerBeforeUpload,
+                style: const TextStyle(
+                    fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ),
+          if (block.fileType == 'PDF')
+            pdfView(context,
+                'https://peproprep.edusuite.store${block.fileUrl}'),
+          if (block.fileType == 'MP4')
+            VideoView(
+                videoUrl:
+                    'https://peproprep.edusuite.store${block.fileUrl}'),
+        ],
+      );
 
                     
 case 'quiz':
@@ -214,12 +242,7 @@ case 'quiz':
                           .map((item) => Text('• $item'))
                           .toList(),
                     );
-                  case 'codeBox':
-                    return Container(
-                      color: Colors.grey[200],
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(block.code),
-                    );
+                  
                   default:
                     return SizedBox.shrink();
                 }

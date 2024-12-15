@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:education_media/ui/lessons/lessons_model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart'as http;
+import 'package:shared_preferences/shared_preferences.dart';
 // class LessonsViewmodel extends ChangeNotifier{
 
 //   List<Lesson> lessons = [];
@@ -36,9 +37,22 @@ import 'package:http/http.dart'as http;
 // }
 
 class LessonViewModel extends ChangeNotifier {
+
+   String? loginKey;
+  String? loginSecretKey;
   ChapterWithLessons? chapterWithLessons;
   bool isLoadingLessons = true;
+Future<void> init() async {
+  // await  _disableScreenshot();
+  await  getKeys();
+  }
 
+ Future<void> getKeys() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    loginKey = pref.getString('loginKey');
+    loginSecretKey = pref.getString('loginSecretKey');
+    notifyListeners();
+  }
   Future<void> fetchLessons(String chapterName) async {
     String encodedChapterName=Uri.encodeComponent(chapterName);
     String encodedPath = "https://peproprep.edusuite.store/api/resource/Course%20Chapter/$encodedChapterName";
@@ -48,7 +62,7 @@ print(encodedPath);
       encodedPath
     );
     try {
-       String credentials = "token 6e874616bdffac3:59a589ce127cc2a";
+       String credentials = "token $loginKey:$loginSecretKey";
 
       final headers = {
         "Authorization": " $credentials",

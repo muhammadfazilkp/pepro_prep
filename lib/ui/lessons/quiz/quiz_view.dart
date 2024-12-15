@@ -267,7 +267,7 @@ class QuizPage extends StatelessWidget {
         final questionDetails = viewModel.currentQuestionDetails!;
         final quiz = viewModel.quiz;
         final mediaQuery=MediaQuery.of(context);
- final double height = mediaQuery.size.height * 0.47; 
+ final double height = mediaQuery.size.height * 0.58; 
   final double width = mediaQuery.size.width * 0.9;
         return Scaffold(
           appBar: AppBar(
@@ -313,25 +313,21 @@ class QuizPage extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Padding(
-                              padding:  EdgeInsets.only(top: 27),
-
-                              
-                              child: Text(
-                                        '${viewModel.parseHtmlstring(questionDetails.question)}?',
-                                // 'This is a long text that you want to display in just two lines. If the text exceeds two lines, it will be truncated.',
-                              
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
-                                    maxLines: 2,
-                                  
-                              ),
-                            ),
+                            Flexible( // Ensures the text fits within the container
+        child: Padding(
+          padding: EdgeInsets.only(top: 27),
+          child: Text(
+            '${viewModel.parseHtmlstring(questionDetails.question)}?',
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            maxLines: 3, // Adjust this as per your layout
+            overflow: TextOverflow.ellipsis, // Adds "..." for overflow
+          ),
+        ),
+      ),
                          
                           ],
                         ),
                       ),
-                      // Marks
                     
                       ...questionDetails.options.map((option) {
                          return Padding(
@@ -343,7 +339,27 @@ class QuizPage extends StatelessWidget {
             color: Colors.grey[100], // Set the desired grey color
  // Set the desired radius
     ),
-    child: RadioListTile<String>(
+    child: 
+    questionDetails.multiple
+    ?CheckboxListTile(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              title: Text(option.text, style: const TextStyle(fontSize: 15)),
+              value: viewModel.selectedOptions.contains(option.text),
+              onChanged: viewModel.isAnswered
+                  ? null
+                  : (value) {
+                      if (value == true) {
+                        viewModel.selectedOptions.add(option.text);
+                      } else {
+                        viewModel.selectedOptions.remove(option.text);
+                      }
+                      viewModel.notifyListeners();
+                    },
+            )
+    
+    :RadioListTile<String>(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8), // Match the radius here
       ),
@@ -365,11 +381,13 @@ class QuizPage extends StatelessWidget {
                       // Check or Submit Button
                       if (!viewModel.isAnswered)
                         ElevatedButton(
-                          onPressed: viewModel.selectedOption == null
-                              ? null
-                              : () => viewModel.checkAnswer(),
-                          child: const Text('Check'),
-                        ),
+  onPressed: (questionDetails.multiple
+          ? viewModel.selectedOptions.isNotEmpty
+          : viewModel.selectedOption != null)
+      ? () => viewModel.checkAnswer()
+      : null,
+  child: const Text('Check'),
+),
                       if (viewModel.isAnswered)
                         Column(
                           children: [
@@ -384,21 +402,7 @@ class QuizPage extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 10),
-                            // Next Question or Submit Quiz
-                          //   ElevatedButton(
-                          //     // onPressed: viewModel.currentQuestionIndex <
-                          //     //         quiz.questions.length - 1
-                          //     //     ? () => viewModel.nextQuestion()
-                          //     //     : () => viewModel.submitQuiz(),
-                          //     // child: Text(
-                          //     //   viewModel.currentQuestionIndex <
-                          //     //           quiz.questions.length - 1
-                          //     //       ? 'Next Question'
-                          //     //       : 'Submit Quiz',
-                          //     // ),
-
-                          // child: const Text('Next Question'),
-                          //     )
+                       
                         if (!viewModel.isAnswered)
                   ElevatedButton(
                     onPressed: viewModel.selectedOption == null
@@ -421,13 +425,13 @@ class QuizPage extends StatelessWidget {
                   ),
                           ],
                         ),
-                        
+
                          if (viewModel.remainingTime > 0)
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: Text(
           'Time Remaining: ${viewModel.formatRemainingTime()}',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
         ),
       ),
                     ],

@@ -50,52 +50,52 @@ class QuizQuestion {
 // Model for Question Details Response
 class QuestionDetails {
   final String question;
-  final String type;
-
   final List<Option> options;
+  final bool multiple; // New field
 
   QuestionDetails({
     required this.question,
-    required this.type,
     required this.options,
+    required this.multiple,
   });
 
-  factory QuestionDetails.fromJson(Map<String, dynamic> json) {
-    return QuestionDetails(
-      question: json['message']['question'],
-      type: json['message']['type'],
-      options: [
-        if (json['message']['option_1'] != null)
-          Option(
-            text: json['message']['option_1'],
-            isCorrect: json['message']['is_correct_1'] == 1,
-          ),
-        if (json['message']['option_2'] != null)
-          Option(
-            text: json['message']['option_2'],
-            isCorrect: json['message']['is_correct_2'] == 1,
-          ),
-        if (json['message']['option_3'] != null)
-          Option(
-            text: json['message']['option_3'],
-            isCorrect: json['message']['is_correct_3'] == 1,
-          ),
-        if (json['message']['option_4'] != null)
-          Option(
-            text: json['message']['option_4'],
-            isCorrect: json['message']['is_correct_4'] == 1,
-          ),
-      ],
-    );
+factory QuestionDetails.fromJson(Map<String, dynamic> json) {
+  final options = <Option>[];
+
+  for (int i = 1; i <= 4; i++) {
+    print('Parsing option_$i');
+    final optionText = json['message']['option_$i'];
+    final isCorrect = json['message']['is_correct_$i'] == 1;
+    final explanation = json['message']['explanation_$i'];
+
+    print('option_$i: $optionText, isCorrect: $isCorrect, explanation: $explanation');
+
+    if (optionText != null) {
+      options.add(Option(
+        text: optionText,
+        isCorrect: isCorrect,
+        explanation: explanation,
+      ));
+    }
   }
+
+  return QuestionDetails(
+    question: json['message']['question'] ?? '',
+    multiple: json['message']['multiple'] == 1,
+    options: options,
+  );
+}
+
 }
 
 class Option {
   final String text;
   final bool isCorrect;
+  final String? explanation;
 
   Option({
     required this.text,
     required this.isCorrect,
+    this.explanation,
   });
 }

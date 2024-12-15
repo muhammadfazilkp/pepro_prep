@@ -4,7 +4,8 @@ import 'dart:io';
 import 'package:education_media/models/lesson_details_model.dart';
 import 'package:education_media/ui/lessons/lesson_details_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_windowmanager/flutter_windowmanager.dart';
+import 'package:html/parser.dart';
+// import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:http/http.dart'as http;
 import 'package:shared_preferences/shared_preferences.dart';
 class LessonDetailsViewModel extends ChangeNotifier {
@@ -18,7 +19,7 @@ class LessonDetailsViewModel extends ChangeNotifier {
 
 
  Future<void> init() async {
-  await  _disableScreenshot();
+  // await  _disableScreenshot();
   await  getKeys();
   }
 
@@ -28,7 +29,10 @@ class LessonDetailsViewModel extends ChangeNotifier {
     loginSecretKey = pref.getString('loginSecretKey');
     notifyListeners();
   }
-
+String parseHtmlstring(String htmlstring){
+  final document=parse(htmlstring);
+  return document.body?.text??"";
+}
 
   Future<void> fetchLessonDetails(String lessonName) async {
     String encodedLessonName = Uri.encodeComponent(lessonName);
@@ -73,13 +77,13 @@ hasAccess=false;
     notifyListeners();
   }
 
-  Future<void> _disableScreenshot() async {
-  if (Platform.isAndroid) {
-    try {
-      await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
-    } catch (e) {
-      debugPrint('Error disabling screenshots: $e');
-    }
-  }
-}
+//   Future<void> _disableScreenshot() async {
+//   if (Platform.isAndroid) {
+//     try {
+//       await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+//     } catch (e) {
+//       debugPrint('Error disabling screenshots: $e');
+//     }
+//   }
+// }
 }
