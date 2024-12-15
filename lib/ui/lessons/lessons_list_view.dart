@@ -13,19 +13,23 @@ class LessonGridView extends StatelessWidget {
   @override
    Widget build(BuildContext context) {
     return ViewModelBuilder<LessonViewModel>.reactive(
-      viewModelBuilder: () => LessonViewModel()..fetchLessons(chapterName!),
+      viewModelBuilder: () => LessonViewModel(),
+      onViewModelReady: (viewModel)async {
+        await viewModel.init();
+        await viewModel.fetchLessons(chapterName!);
+      },
       builder: (context, viewModel, child) {
         if (viewModel.isLoadingLessons) {
           return const Center(child: CircularProgressIndicator());
         }
         if (viewModel.chapterWithLessons == null ||
             viewModel.chapterWithLessons!.lessons.isEmpty) {
-          return const Center(child: Text('No lessons available.'));
+          return Scaffold(body: const Center(child: Text('No lessons available.')));
         }
         final lessons = viewModel.chapterWithLessons!.lessons;
         return Scaffold(
           appBar: AppBar(
-            title: Text('Lessons in ${viewModel.chapterWithLessons!.title}'),
+            title: Text('${viewModel.chapterWithLessons!.title}'),
           ),
           body: GridView.builder(
             padding: const EdgeInsets.all(8.0),
@@ -37,6 +41,9 @@ class LessonGridView extends StatelessWidget {
             itemCount: lessons.length,
             itemBuilder: (context, index) {
               final lesson = lessons[index];
+              String lessonname=lesson.lesson;
+              String trimmedText = lessonname.split(' ').skip(1).join(' ');
+
               return InkWell(
                 onTap: (){
                    Navigator.push(
@@ -62,10 +69,11 @@ class LessonGridView extends StatelessWidget {
                               ),
                                                             ),
                                                           ),
-                      Center(
+                      Padding(
+                        padding: const EdgeInsets.only(left: 18),
                         child: AnimatedTextKit(animatedTexts: [
-                          TypewriterAnimatedText(lesson.lesson,textStyle: TextStyle(fontFamily: 'Agne',fontSize: 16,fontWeight: FontWeight.w600))
-                        ])
+                          TypewriterAnimatedText(trimmedText,textStyle: TextStyle(fontFamily: 'Agne',fontSize: 16,fontWeight: FontWeight.w600))
+                        ]),
                       ),
                     ],
                   ),

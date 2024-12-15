@@ -12,6 +12,7 @@ class ChapterView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return ViewModelBuilder<ChapterVeiwmodel>.reactive(
       onViewModelReady: (viewModel)async {
 
@@ -29,14 +30,20 @@ class ChapterView extends StatelessWidget {
               : viewModel.chapters.isEmpty
                   ? const Center(child: Text('No chapters available.'))
                   : ListView.separated(
+                    
                       padding: const EdgeInsets.all(8.0),
                       itemCount: viewModel.chapters.length,
                       separatorBuilder: (context, index) => const Divider(),
                       itemBuilder: (context, index) {
                         final chapter = viewModel.chapters[index];
-                        return InkWell(
-                          onTap: () {
-                            Navigator.push(
+                                String chaptername=chapter.name;
+                                 String trimmedText = chaptername.split(' ').skip(1).join(' ');
+
+                        return GestureDetector(
+                          onTap: (){
+                         viewModel.isLoadingchapters
+                         ?Center(child: CircularProgressIndicator(),)
+                            : Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
@@ -45,11 +52,21 @@ class ChapterView extends StatelessWidget {
                             );
                           },
                           child: Card(
-                            elevation: 4,
+                            
                             child: ListTile(
+                            trailing: InkWell(child: Icon(Icons.keyboard_double_arrow_right_rounded),onTap: (){
+                              Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    LessonGridView(chapterName: chapter.name),
+                              ),
+                            );
+                            },),
                               title:AnimatedTextKit(
+                                
                                 animatedTexts: [
-                                TyperAnimatedText(chapter.name,textStyle: TextStyle(fontFamily: 'Agne',fontSize: 15,fontWeight: FontWeight.w600))
+                                TyperAnimatedText(trimmedText,textStyle: TextStyle(fontFamily: 'Agne',fontSize: 16,fontWeight: FontWeight.w600))
                               ]),
                               leading:Container(
                                                             height: 50, 

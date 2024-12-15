@@ -96,7 +96,6 @@ import 'dart:convert';
 //   String get code => data['code'] ?? '';
 //   String get language => data['language'] ?? '';
 // }
-import 'dart:convert';
 
 class LessonDetails {
   final String name;

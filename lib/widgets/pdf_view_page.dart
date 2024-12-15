@@ -20,8 +20,7 @@ import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 //   }
 // }
 
-
-Widget pdfView(BuildContext context, String pdfUrl, String fileName) {
+Widget pdfView(BuildContext context, String pdfUrl) {
   return GestureDetector(
     onTap: () {
       // Navigate to the full-screen PDF view
@@ -32,28 +31,34 @@ Widget pdfView(BuildContext context, String pdfUrl, String fileName) {
         ),
       );
     },
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        // PDF icon
-        Icon(
-          Icons.picture_as_pdf,
-          size: 45,
-          color: Colors.red,
-        ),
-        const SizedBox(height: 8.0),
-        // PDF file name
-        Text(
-          fileName,
-          style: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.bold,
-            color: Colors.blue,
+    child: Container(
+      alignment: Alignment.center,
+      padding: const EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // PDF icon
+          Icon(
+            Icons.picture_as_pdf,
+            size: 45,
+            color: Colors.red,
           ),
-          textAlign: TextAlign.center,
-        ),
-      ],
+          const SizedBox(height: 4),
+          // PDF view text
+          Text(
+            'View',
+            style: TextStyle(
+              color: Colors.blue,
+              fontWeight: FontWeight.w500,
+              fontSize: 13,
+            ),
+          ),
+        ],
+      ),
     ),
-  );}
-
-  
+  );
+}

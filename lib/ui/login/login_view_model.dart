@@ -80,7 +80,7 @@ class LoginViewModel extends ChangeNotifier {
         _errorMessage = error['message'] ?? 'An error occurred';
       }
     } catch (e) {
-      _errorMessage = 'Could not connect to the server';
+      _errorMessage = 'User not found';
     } finally {
       _isLoading = false;
       notifyListeners();

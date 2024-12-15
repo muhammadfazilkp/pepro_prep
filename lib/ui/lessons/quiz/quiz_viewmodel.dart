@@ -14,6 +14,7 @@ class QuizViewModel extends ChangeNotifier {
   bool isAnswered = false;
   bool isCorrect = false;
     bool isSubmitted = false; // New state for submission
+  List<String> selectedOptions = []; 
 
   List<Map<String, dynamic>> results = [];
 String? loginKey;
@@ -61,9 +62,9 @@ _timer=Timer.periodic(const Duration(seconds: 1), (timer){
     try {
       final fetchedQuiz = await fetchQuiz(quizname!);
       quiz = fetchedQuiz;
+             remainingTime = quiz.duration.toInt(); // Convert duration to seconds
 
       if(remainingTime>0){
-       remainingTime = (quiz.duration * 60).toInt(); // Convert duration to seconds
       startTimer(context); 
 
       }else{
@@ -126,23 +127,45 @@ print(response.body);
     if (response.statusCode == 200) {
       currentQuestionDetails =
           QuestionDetails.fromJson(jsonDecode(response.body));
+          notifyListeners();
+
+          print(currentQuestionDetails!.multiple);
+          for (var option in currentQuestionDetails!.options) {
+  print(' - ${option.text}, Correct: ${option.isCorrect}');
+}
     } else {
       throw Exception('Failed to load question details');
     }
+    notifyListeners();
   }
 
   // Check answer correctness
   void checkAnswer() {
-    if (selectedOption == null) return;
+    // if (selectedOption == null) return;
 
     isAnswered = true;
-    isCorrect = currentQuestionDetails!.options
+
+    if(currentQuestionDetails!.multiple){
+      final correctOptions = currentQuestionDetails!.options
+          .where((option) => option.isCorrect)
+          .map((option) => option.text)
+          .toSet();
+      final selectedSet = selectedOptions.toSet();
+
+      isCorrect = correctOptions.difference(selectedSet).isEmpty &&
+          selectedSet.difference(correctOptions).isEmpty;
+    }else{
+ isCorrect = currentQuestionDetails!.options
         .firstWhere((option) => option.text == selectedOption!)
         .isCorrect;
+    }
+   
 
  results.add({
       "question_name": quiz.questions[currentQuestionIndex].questionId,
-      "answer": selectedOption!,
+      "answer": currentQuestionDetails!.multiple
+                ?selectedOptions.join(', ')
+                :selectedOption,
       "is_correct": [isCorrect ? 1 : 0],
     });
     notifyListeners();
@@ -198,10 +221,14 @@ Future<void> submitQuiz(BuildContext context) async {
               'You got $percentage% correct answers with a score of $score out of $scoreOutOf.'),
           actions: [
             TextButton(
+              
               onPressed: () {
+                resetEverystate();
+Navigator.of(context).pop();
+Navigator.of(context).pop();
 
               },
-              child: const Text('OK'),
+              child: const Text('Start again'),
             ),
           ],
         ),
@@ -214,8 +241,20 @@ Future<void> submitQuiz(BuildContext context) async {
     isAnswered = false;
     isCorrect = false;
     selectedOption = null;
-  }
+        selectedOptions.clear(); // Clear multi-select options
 
+  }
+void resetEverystate(){
+    currentQuestionIndex = 0;
+  results.clear();
+  selectedOption = null;
+  isAnswered = false;
+  isCorrect = false;
+  isSubmitted = false; // Reset the submission state
+  remainingTime = 0; // Reset time
+  _timer?.cancel(); // Stop the timer
+  notifyListeners();
+}
 
 String parseHtmlstring(String htmlstring){
   final document=parse(htmlstring);
